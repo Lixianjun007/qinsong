@@ -61,4 +61,51 @@ $(function()
     }).on('changeDate.datepicker.amui', function(ev) {
       checkout.close();
     }).data('amui.datepicker');
+    
+    
+    
+    $(document).on('click', '.alloperate', function()
+	{
+            var id = check_chooseids();
+            if(id.length === 0){
+                alert('请先勾选要操作的内容！');
+                return;
+            }
+            var text = '你确定要将装填批量改为';
+            var status = $(this).attr('value');
+            console.log(id,status);
+            if(status == 1){
+                text += '已处理';
+            }else if(status == 2){
+                text += '已支付';
+            }else if(status == 3){
+                text += '已完成';
+            }else if(status == 4){
+                text += '已取消';
+            }else if(status == 5){
+                text += '已关闭';
+            }else if(status == 6){
+                text += '配送中';
+            }
+            text += '?';
+            $('#alloperate_text').html(text);
+            
+		$('#confirm-success').modal({
+			relatedTarget: this,
+			onConfirm: function(options)
+			{
+			
+			},
+			onCancel: function(){}
+		});
+	});
+    
+    function check_chooseids(){
+        var ids = [];
+        $("input[type='checkbox']:checked").each(function(index){
+            ids[index] = $(this).attr('value');
+        })
+        return ids;
+    }
+    
 });

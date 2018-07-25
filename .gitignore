@@ -8,3 +8,9 @@ temp
 Logs
 logs
 *.lock
+/nbproject/configs/*.properties
+/nbproject/private/*.properties
+/nbproject/private/configs/*.properties
+/nbproject/private/*.xml
+/nbproject/*.properties
+/nbproject/*.xml
