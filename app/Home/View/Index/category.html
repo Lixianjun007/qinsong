@@ -1,0 +1,38 @@
+<extend name="./app/Home/View/Layout/application.html"/>
+
+<block name="content">
+
+    <div class="clearsH"></div>
+
+    <div class="all">
+        <ul class="menu">
+            <li><a href="javascript:void(0);">商品分类</a></li>
+            <li><a href="javascript:void(0);" id="list"><i class="fa fa-th"></i></a></li>
+        </ul>
+    </div>
+
+    <div class="products">
+        <volist name="categories" id="category">
+            <div class="panel-box">
+                <h4 class="panel-title">
+                    <a class="link" href="javascript:void (0);"><span class="fa fa-calendar"></span>
+                        &nbsp;{{$category.name}}</a>
+                </h4>
+                <div class="panel-body" style="display: none;">
+                    <volist name="category.children" id="child">
+                        <a class="link" href="http://qinsongc.net/shop.php{{:U('Index/all', ['category_id' =>$child[id]])}}"> {{$child.name}} </a>
+                    </volist>
+                </div>
+            </div>
+        </volist>
+    </div>
+</block>
+<block name="js">
+    <script type="text/javascript">
+        $(function () {
+            $('.panel-title').click(function () {
+                $(this).next().toggle().parents('.panel-box').siblings().children('.panel-body').hide();
+            });
+        });
+    </script>
+</block>

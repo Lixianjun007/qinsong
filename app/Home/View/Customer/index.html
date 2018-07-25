@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>会员中心</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/vex/dist/css/vex.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/vex/dist/css/vex-theme-top.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/assets/home/css/common.css"/>
+</head>
+<body>
+<header class="member">
+    <img class="img-responsive" src="__PUBLIC__/assets/home/images/background.jpg"/>
+
+    <dl>
+        <dt><img class="img-responsive img-circle" src="{{$customerInfo.thumb}}" alt="会员头像"/></dt>
+        <dd>尊贵的：{{$customerInfo.nickname}}</dd>
+        <dd>会员号：{{$customerInfo.customer_no}}</dd>
+        <dd>入会时间：{{$customerInfo.created_at|date="Y-m-d H:i:s", ###}}</dd>
+        <dd>个性签名：<span id="inputSign">{{$customerInfo.sign}}</span></dd>
+    </dl>
+
+    <span id="edit" class="fa fa-pencil-square-o"></span>
+
+    <a id="share" href=""><i class="fa fa-share-alt"></i> <br/> 分享</a>
+</header>
+
+<div class="clearsH"></div>
+
+<ul class="datum">
+    <li><a href="http://qinsongc.net/shop.php{{:U('orders',array('status'=>'0'))}}"><strong>{{$daifu}}</strong> <i class="fa fa-tasks"></i> 待付款</a>
+    </li>
+    <li><a href="http://qinsongc.net/shop.php{{:U('orders',array('status'=>'1'))}}"><strong>{{$daifa}}</strong> <i class="fa fa-tasks"></i> 待发货</a>
+    </li>
+    <li><a href="http://qinsongc.net/shop.php{{:U('orders',array('status'=>'2'))}}"><strong>{{$yifa}}</strong> <i class="fa fa-truck"></i> 已发货</a>
+    </li>
+    <li><a href="http://qinsongc.net/shop.php{{:U('orders',array('status'=>'3'))}}"><strong>{{$wancheng}}</strong> <i class="fa fa-th-list"></i>
+        已完成</a></li>
+</ul>
+
+<a class="link" href="http://qinsongc.net/shop.php{{:U('orders', ['status'=>'all'])}}"><i class="fa fa-shopping-cart"></i> 我的订单</a>
+
+<div class="clearsH"></div>
+
+<a class="link" href="http://qinsongc.net/shop.php{{:U('logistic')}}"><i class="fa fa-list-ol"></i> 物流跟踪</a>
+
+<div class="clearsH"></div>
+
+<a class="link" href="http://qinsongc.net/shop.php{{:U('info', ['id'=>$customerInfo[id]])}}"><i class="fa fa-user"></i> 修改个人资料</a>
+<a class="link" href="http://qinsongc.net/shop.php{{:U('inquiry')}}"><i class="fa fa-money"></i> 会员充值</a>
+<a class="link" href="http://qinsongc.net/shop.php{{:U('Customer/logout')}}"><i class="fa fa-stop-circle-o"></i> 退出</a>
+
+<include file="./app/Home/View/Layout/_footer.html"/>
+
+<script type="text/javascript" src="__PUBLIC__/assets/home/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/vendor/vex/dist/js/vex.combined.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //编辑个性签名
+        $('#edit').bind('click', function () {
+            var signStr = $('#inputSign').text();
+            vex.dialog.open({
+                className: "vex-theme-top",
+                message: '编辑个性签名',
+                input: '<textarea placeholder="请填写个性签名" name="sign" id="sign" style="height: 120px; line-height: 24px; resize: none;"></textarea>',
+                buttons: [
+                    $.extend({}, vex.dialog.buttons.YES, {
+                        text: '保存'
+                    }), $.extend({}, vex.dialog.buttons.NO, {
+                        text: '返回'
+                    })
+                ],
+                callback: function (data) {
+                    if (data) {
+                        var sign = $("#sign").val();
+//                        console.log(sign);return;
+                        $.post("http://qinsongc.net/shop.php{{:U('editSign')}}", {
+                            sign: sign
+                        }, function (data) {
+                            if (data.status == 1) {
+                                $("#inputSign").text($.trim(sign));
+                            }
+                        })
+                    }
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

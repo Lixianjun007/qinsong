@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <title>订单详情</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/assets/home/css/common.css"/>
+</head>
+<body>
+
+<ul class="menu">
+    <li class="on"><a class="current" href="http://qinsongc.net/shop.php{{:U('orders',array('status'=>'all'))}}">全部</a></li>
+    <li><a href="http://qinsongc.net/shop.php{{:U('orders',array('status'=>'0'))}}">待付款</a></li>
+    <li><a href="http://qinsongc.net/shop.php{{:U('orders',array('status'=>'1'))}}">待发货</a></li>
+    <li><a href="http://qinsongc.net/shop.php{{:U('orders',array('status'=>'2'))}}">已发货</a></li>
+    <li><a href="http://qinsongc.net/shop.php{{:U('orders',array('status'=>'3'))}}">已完成</a></li>
+</ul>
+
+<volist name="all_orders" id="order">
+    <div class="order">
+        <h2>订单号：{{$order.order_no}}</h2>
+        <php>if($order['order_status'] == 0){</php>
+        <h4 class="payment"><img src="__PUBLIC__/assets/home/images/bg04.png" alt="待付款"></h4>
+        <php>}elseif($order['order_status'] == 1){</php>
+        <h4 class="deliver"><img src="__PUBLIC__/assets/home/images/bg05.png" alt="待发货"></h4>
+        <php>}elseif($order['order_status'] == 2){</php>
+        <h4 class="send"><img src="__PUBLIC__/assets/home/images/bg03.png" alt="已发货"></h4>
+        <php>}else{</php>
+        <h4 class="finish"><img src="__PUBLIC__/assets/home/images/bg02.png" alt="已完成"></h4>
+        <php>}</php>
+
+        <volist name="order.order_products" id="product">
+            <dl>
+                <dt><img class="img-responsive" src="{{$product.product.thumb}}" alt="产品图片"></dt>
+                <dd>{{$product.product.name}}</dd>
+                <dd><span>x {{$product.product.number}}</span>¥ {{$product.product.price}}元</dd>
+            </dl>
+        </volist>
+        <p>总价：<em>¥ {{$order.total_price}}元</em>
+            <in name="order.order_status" value="1">
+                <i class="cancel" data-id="{{$order.id}}" data-status="{{$order.order_status}}">取消订单</i>
+            </in>
+        </p>
+    </div>
+</volist>
+
+
+<script type="text/javascript" src="__PUBLIC__/assets/home/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/vendor/sticky/jquery.sticky.js"></script>
+<script type="text/javascript" src="__PUBLIC__/assets/home/js/order.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        //取消订单
+        $('.cancel').click(function () {
+            if (confirm('确定要取消此订单么？')) {
+                var id = $(this).attr('data-id');
+                var status = $(this).attr('data-status');
+                $.post("http://qinsongc.net/shop.php{{:U('cancel_order')}}", {
+                    id: id,
+                    status: status
+                }, function () {
+                    window.location.reload();
+                })
+            }
+        });
+    })
+</script>
+</body>
+</html>

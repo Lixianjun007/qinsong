@@ -1,0 +1,538 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+<block name="css">
+    <link rel="stylesheet" href="__PUBLIC__/assets/vendor/nestable/jquery.nestable.css">
+</block>
+<block name="content">
+    <div class="admin-content" id="app">
+        <div class="am-cf am-padding">
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">菜单与权限</strong> /
+                <small>Menus & Permissions</small>
+            </div>
+        </div>
+
+        <div class="am-alert am-alert-danger" data-am-alert style="display: none;width: 800px;margin-left: 100px"></div>
+
+        <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-6">
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                        <button type="button" id="top" class="am-btn am-btn-default"
+                                data-am-modal="{target: '#addmodal'}">
+                            <span class="am-icon-plus"></span> 新增顶级菜单
+                        </button>
+                        <button type="button" onclick="compress()" class="am-btn am-btn-secondary">
+                            <span class="am-icon-compress"></span> 折叠
+                        </button>
+                        <button type="button" onclick="expand()" class="am-btn am-btn-success">
+                            <span class="am-icon-expand"></span> 展开
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="am-g">
+            <div class="am-u-lg-8">
+
+                <div class="dd" id="nestable">
+                    <ol class="dd-list" id="zong">
+                        <volist name="rules" id="rule">
+                            <li class="dd-item dd3-item" data-id="{{$rule.id}}"
+                                data-parent_id="{{$rule.parent_id}}">
+                                <div class="dd-handle dd3-handle">Drag</div>
+                                <div class="dd3-content">
+                                    <span class="{{$rule.icon}}"></span>
+                                    <span class="title">{{$rule.title}}</span>
+                                    <span class="name">({{$rule.name}})</span>
+                                    <div class="pull-right action-buttons">
+                                        <a href="javascript:;"><i class="am-icon-plus"
+                                                                  data-am-modal="{target: '#addmodal'}"></i></a>
+                                        <a href="javascript:;"><i class="am-icon-pencil"
+                                                                  data-am-modal="{target: '#editmodal'}"></i></a>
+                                        <a href="javascript:;"><i class="am-icon-trash"></i></a>
+                                    </div>
+                                </div>
+
+                                <ol class="dd-list dd-hide" data-start-collapsed="true">
+                                    <volist name="rule.children" id="child">
+                                        <li class="dd-item dd3-item" data-id="{{$child.id}}"
+                                            data-parent_id="{{$child.parent_id}}">
+                                            <div class="dd-handle dd3-handle">Drag</div>
+                                            <div class="dd3-content">
+                                                <span class="{{$child.icon}}"></span>
+                                                <span class="title">{{$child.title}}</span>
+                                                <span class="name">({{$child.name}})</span>
+                                                <div class="pull-right action-buttons">
+                                                    <a href="javascript:;"><i class="am-icon-plus two"
+                                                                              data-am-modal="{target: '#addmodal'}"></i></a>
+                                                    <a href="javascript:;"><i class="am-icon-pencil"
+                                                                              data-am-modal="{target: '#editmodal'}"></i></a>
+                                                    <a href="javascript:;"><i class="am-icon-trash"></i></a>
+                                                </div>
+                                            </div>
+
+                                            <ol class="dd-list dd-hide" data-start-collapsed="true">
+                                                <volist name="child.children" id="c">
+                                                    <li class="dd-item dd3-item" data-id="{{$c.id}}"
+                                                        data-parent_id="{{$c.parent_id}}">
+                                                        <div class="dd-handle dd3-handle">Drag</div>
+                                                        <div class="dd3-content">
+                                                            <span class="{{$c.icon}}"></span>
+                                                            <span class="title">{{$c.title}}</span>
+                                                            <span class="name">({{$c.name}})</span>
+                                                            <div class="pull-right action-buttons">
+                                                                <a href="javascript:;"><i
+                                                                        class="am-icon-pencil"
+                                                                        data-am-modal="{target: '#editmodal'}"></i></a>
+                                                                <a href="javascript:;"><i
+                                                                        class="am-icon-trash"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </volist>
+                                            </ol>
+                                        </li>
+                                    </volist>
+                                </ol>
+                            </li>
+                        </volist>
+                    </ol>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--新增模态框-->
+    <div class="am-modal am-modal-alert" tabindex="-1" id="addmodal">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">
+                新增分类
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-panel-bd ">
+                <form class="am-form">
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            上级菜单
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-10">
+                            <select id="sel">
+                                <option value="0">顶级菜单</option>
+                                <volist name="categories" id="category">
+                                    <option value="{{$category.id}}">{{$category.title}}</option>
+                                    <volist name="category['children']" id="child">
+                                        <option value="{{$child.id}}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;{{$child.title}}
+                                        </option>
+                                    </volist>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            图标
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-10">
+                            <div class="am-form-group am-form-icon">
+                                <i class=""></i>
+                                <input type="text" id="icon" name="icon" oninput="change_icon()"
+                                       class="am-form-field am-input-sm" placeholder="请输入图标的class">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            菜单名称
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-10">
+                            <input type="text" id="title" name="title" class="am-input-sm" placeholder="请输入菜单名称"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            权限名称
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-10">
+                            <textarea rows="4" id="name" name="name" placeholder="请输入权限名称" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-margin">
+                        <input type="button" class="am-btn am-btn-primary am-radius add" value="保 存">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--编辑模态框-->
+    <div class="am-modal am-modal-alert" tabindex="-1" id="editmodal">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">
+                编辑分类
+                <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+            </div>
+            <div class="am-panel-bd ">
+                <form class="am-form">
+                    <input type="hidden" id="edit_id" value="">
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            上级菜单
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-10">
+                            <select id="edit_sel">
+                                <option value="0">顶级菜单</option>
+                                <volist name="categories" id="category">
+                                    <option value="{{$category.id}}">{{$category.title}}</option>
+                                    <volist name="category['children']" id="child">
+                                        <option value="{{$child.id}}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;{{$child.title}}
+                                        </option>
+                                    </volist>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            图标
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-10">
+                            <div class="am-form-group am-form-icon">
+                                <i class=""></i>
+                                <input type="text" id="edit_icon" name="icon" oninput="edit_change_icon()"
+                                       class="am-form-field am-input-sm" placeholder="请输入图标的class">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            菜单名称
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-10">
+                            <input type="text" id="edit_title" name="title" class="am-input-sm" placeholder="请输入菜单名称"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            权限名称
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-10">
+                            <textarea rows="4" id="edit_name" name="name" placeholder="请输入权限名称" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-margin">
+                        <input type="button" class="am-btn am-btn-primary am-radius edit" value="保 存"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</block>
+<block name="js">
+    <script src="__PUBLIC__/assets/vendor/nestable/jquery.nestable.js"></script>
+    <script>
+        //时时改变图标
+        function change_icon() {
+//            alert(123);
+            var a = $("#icon").val();
+            $("#icon").prev().attr('class', a);
+        }
+
+        function edit_change_icon() {
+            var b = $("#edit_icon").val();
+            $("#edit_icon").prev().attr('class', b);
+        }
+
+        //展开
+        function expand() {
+            $('.dd').nestable('expandAll');
+        }
+
+        //折叠
+        function compress() {
+            $('.dd').nestable('collapseAll');
+        }
+
+        //排序
+        $(function () {
+            $('.dd').nestable({
+                maxDepth: 3
+            }).on('change', function () {
+                var sort_order = window.JSON.stringify($('#nestable').nestable('serialize'));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Admin/AuthSet/sort_order_rule',
+//                    contentType: "application/json",
+                    dataType: "JSON",
+                    data: {
+                        sort_order: sort_order
+                    },
+                    success: function (data) {
+                        if (data.status == 0) {
+                            alert(data.msg);
+                            return false;
+                        }
+                    }
+                });
+            });
+
+            //新增顶级
+            $("#top").click(function () {
+                $("#sel option").eq(0).prop('selected', true);
+
+            });
+
+            //新增菜单
+            $(document).on('click', ".am-icon-plus", function () {
+                if ($(this).hasClass("two")) {
+                    $("#icon").attr("readOnly", 'true')
+                } else {
+                    $("#icon").removeAttr("readOnly");
+                }
+                var id = $(this).parents('li').data('id');
+                var title = $(this).parent().parent().siblings('.title').text();
+                title = $.trim(title);
+//                console.log(title);
+                $("li").removeClass('create');
+                $(this).parents("li").eq(0).addClass('create');
+                $("#sel option").each(function () {
+                    if ($.trim($(this).text()) == title) {
+                        $(this).prop('selected', true);
+                    }
+                })
+
+            });
+
+            //新增分类
+            $(document).on("click", ".add", function () {
+//                alert(121);
+                var info = {
+                    parent_id: $("#sel").val(),
+                    icon: $("#icon").val(),
+                    title: $("#title").val(),
+                    name: $("#name").val()
+                };
+//                console.log(info);
+                if (($("#sel").val() != '') && ($("#title").val() != '') && ($("#name").val() != '')) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Admin/AuthSet/add_rule",
+                        data: info,
+                        success: function (data) {
+                            console.log(data);
+                            if (info.icon == '') { //新增三级分类
+                                var html3 = '<li class="dd-item dd3-item" data-id="' + data.id + '" data-parent_id="' + info.parent_id + '">' +
+                                    '<div class="dd-handle dd3-handle">' +
+                                    'Drag' +
+                                    '</div>' +
+                                    '<div class="dd3-content">' +
+                                    '<span class="">' +
+                                    '</span>' +
+                                    '<span class="title">' + info.title +
+                                    '</span>' +
+                                    '<span class="name">' + '(' + info.name + ')' +
+                                    '</span>' +
+                                    '<div class="pull-right action-buttons">' +
+                                    '<a href="javascript:;">' +
+                                    '<i class="am-icon-pencil">' +
+                                    '</i>' +
+                                    '</a>' +
+                                    '<a href="javascript:;">' +
+                                    '<i class="am-icon-trash">' +
+                                    '</i>' +
+                                    '</a>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</li>';
+                                $("li.create").children("ol").append(html3);
+
+                            } else {
+                                if (info.parent_id == 0) {//新增顶级分类
+                                    var html1 = '<li class="dd-item dd3-item" data-id="' + data.id + '" data-parent_id="' + info.parent_id + '">' +
+                                        '<button data-action="collapse" type="button" style="display: none;">Collapse</button>' +
+                                        '<button data-action="expand" type="button" style="">Expand</button>' +
+                                        '<div class="dd-handle dd3-handle">' +
+                                        'Drag' +
+                                        '</div>' +
+                                        '<div class="dd3-content">' +
+                                        '<span class="' + info.icon + '">' +
+                                        '</span>' +
+                                        '<span class="title">' + info.title +
+                                        '</span>' +
+                                        '<span class="name">' + '(' + info.name + ')' +
+                                        '</span>' +
+                                        '<div class="pull-right action-buttons">' +
+                                        '<a href="javascript:;">' +
+                                        '<i class="am-icon-plus" data-am-modal="{target: "#addmodal"}">' +
+                                        '</i>' +
+                                        '</a>' +
+                                        '<a href="javascript:;">' +
+                                        '<i class="am-icon-pencil">' +
+                                        '</i>' +
+                                        '</a>' +
+                                        '<a href="javascript:;">' +
+                                        '<i class="am-icon-trash">' +
+                                        '</i>' +
+                                        '</a>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</li>';
+                                    $(html1).appendTo("#zong");
+                                } else {                     //新增二级分类
+                                    var html2 = '<li class="dd-item dd3-item" data-id="' + data.id + '" data-parent_id="' + info.parent_id + '">' +
+                                        '<button data-action="collapse" type="button" style="display: none;">Collapse</button>' +
+                                        '<button data-action="expand" type="button" style="">Expand</button>' +
+                                        '<div class="dd-handle dd3-handle">' +
+                                        'Drag' +
+                                        '</div>' +
+                                        '<div class="dd3-content">' +
+                                        '<span class="' + info.icon + '">' +
+                                        '</span>' +
+                                        '<span class="title">' + info.title +
+                                        '</span>' +
+                                        '<span class="name">' + '(' + info.name + ')' +
+                                        '</span>' +
+                                        '<div class="pull-right action-buttons">' +
+                                        '<a href="javascript:;">' +
+                                        '<i class="am-icon-plus two" data-am-modal="{target: "#addmodal"}">' +
+                                        '</i>' +
+                                        '</a>' +
+                                        '<a href="javascript:;">' +
+                                        '<i class="am-icon-pencil">' +
+                                        '</i>' +
+                                        '</a>' +
+                                        '<a href="javascript:;">' +
+                                        '<i class="am-icon-trash">' +
+                                        '</i>' +
+                                        '</a>' +
+                                        '</div>' +
+                                        '</div>' +
+                                        '</li>';
+                                    $("li.create").children("ol").append(html2);
+                                }
+                            }
+
+                            $("#icon").val('');
+                            $("#title").val('');
+                            $("#name").val('');
+
+
+                        }
+
+                    });
+                }
+
+                $("#addmodal").modal('close');
+
+            });
+
+            //编辑
+            $(".am-icon-pencil").on("click", function () {
+//               alert(121);
+//                console.log($(this).parent("a").prev().length);
+
+                if ($(this).parent("a").prev().length == 0) {
+                    $("#edit_icon").attr("readOnly", 'true');
+                } else {
+                    $("#edit_icon").removeAttr("readOnly");
+                }
+
+                var id = $(this).parents('li').data('id');
+                var parent_id = $(this).parents('li').data('parent_id');
+                var title = $(this).parent().parent().siblings('.title').text();
+                var icon = $(this).parent().parent().siblings().eq(0).attr("class");
+                var name = $(this).parent().parent().siblings('.name').text();
+                name = name.replace(/\(|\)/g, '');//正则表达式，去除小括号
+                title = $.trim(title); //去除空格函数
+
+                //遍历select选项满足条件则选中
+                $("#edit_sel option").each(function () {
+                    if ($(this).val() == parent_id) {
+                        $(this).prop('selected', true);
+                    }
+                });
+                $("#edit_id").val(id);
+                $("#edit_icon").val(icon);
+                $("#edit_title").val(title);
+                $("#edit_name").val(name);
+                $("#edit_icon").prev().attr('class', icon);
+
+
+                //获取编辑后的值
+                $(document).on('click', '.edit', function () {
+//                alert(222);
+                    var id = $("#edit_id").val();
+                    var info = {
+                        id: id,
+                        parent_id: $('#edit_sel').val(),
+                        icon: $("#edit_icon").val(),
+                        title: $("#edit_title").val(),
+                        name: $("#edit_name").val()
+                    };
+                    console.log(info);
+                    $.ajax({
+                        type: "POST",
+                        url: '/Admin/AuthSet/edit_rule',
+                        data: info,
+                        success: function () {
+                            $('#editmodal').modal('close');
+                            window.location.reload();
+
+
+                        }
+                    });
+                });
+
+            });
+
+            //删除
+            $(document).on('click', '.am-icon-trash', function () {
+//            alert(123);
+                if (confirm('您确认要删除吗？')) {
+                    var id = $(this).parents('li').data('id');
+                    console.log(id);
+                    var _this = $(this);
+                    $.ajax({
+                        type: 'GET',
+                        url: '/Admin/AuthSet/delete_rule/' + id,
+                        data: {id: id},
+                        success: function (data) {
+                            if (data.status == '0') {
+                                $(".am-alert-danger").text(data.info).fadeIn(200).fadeOut(3000);
+                                return false;
+                            }
+
+//                            _this.parentsUntil('li').fadeOut(500);
+                            _this.closest('li').fadeOut(500);
+
+
+                        },
+                        error: function (data) {
+
+                            window.location.reload();
+                        }
+
+                    });
+                    return false;
+                }
+                return false;
+            });
+        })
+    </script>
+</block>

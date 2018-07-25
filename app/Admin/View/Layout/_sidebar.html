@@ -1,0 +1,68 @@
+<div class="admin-sidebar am-offcanvas" id="admin-offcanvas">
+    <div class="am-offcanvas-bar admin-offcanvas-bar">
+        <ul class="am-list admin-sidebar-list">
+            <li><a href="/admin" id="admin"><span class="am-icon-home"></span> 首页</a></li>
+            <li class="admin-parent">
+                <a class="am-cf" data-am-collapse="{target: '#shop-nav'}"><span
+                        class="am-icon-shopping-cart"></span>
+                    商城中心 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+                <ul class="am-list am-collapse admin-sidebar-sub am-in" id="shop-nav">
+                    <li><a href="http://qinsongc.net/shop.php{{:U('Product/index')}}" class="am-cf"><span class="am-icon-product-hunt"></span>
+                        商品管理<span
+                                class="am-badge am-badge-success am-margin-right am-fr">{{$count['products']}}</span></a>
+                    </li>
+                    <li><a href="http://qinsongc.net/shop.php{{:U('Category/index')}}"><span class="am-icon-calendar"></span> 分类管理</a></li>
+                    <li><a href="http://qinsongc.net/shop.php{{:U('Advert/index')}}"><span class="am-icon-google"></span> 广告管理<span
+                            class="am-badge am-badge-warning am-margin-right am-fr">{{$count['advert']}}</span></a></li>
+                    <li><a href="http://qinsongc.net/shop.php{{:U('Product/trash')}}"><span class="am-icon-bug"></span> 商品回收站<span
+                            class="am-badge am-badge-primary am-margin-right am-fr">{{$count['trash']}}</span></a></li>
+                    <li><a href="http://qinsongc.net/shop.php{{:U('Customer/index')}}"><span class="am-icon-user"></span> 会员管理<span
+                            class="am-badge am-badge-secondary am-margin-right am-fr">{{$count['customer']}}</span></a>
+                    </li>
+                    <li><a href="http://qinsongc.net/shop.php{{:U('Order/index')}}"><span class="am-icon-first-order"></span> 订单管理<span
+                            class="am-badge am-badge-success am-margin-right am-fr">{{$count['orders']}}</span></a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="admin-parent">
+                <a class="am-cf" data-am-collapse="{target: '#rules-nav'}"><span
+                        class="am-icon-gear am-icon-spin"></span> 系统管理 <span
+                        class="am-icon-angle-right am-fr am-margin-right"></span></a>
+                <ul class="am-list am-collapse admin-sidebar-sub am-in" id="rules-nav">
+                    <li><a href="http://qinsongc.net/shop.php{{:U('AuthSet/rule_manage')}}"><span class="am-icon-lock"></span> 菜单与权限<span
+                            class="am-icon-star am-fr am-margin-right admin-icon-yellow"></span></a></li>
+                    <li><a href="http://qinsongc.net/shop.php{{:U('AuthSet/group_manage')}}"><span class="am-icon-group"></span> 用户组管理<span
+                            class="am-badge am-badge-success am-margin-right am-fr">{{$count['groups']}}</span></a></li>
+                    <li><a href="http://qinsongc.net/shop.php{{:U('AuthSet/user_manage')}}"><span class="am-icon-user"></span> 用户管理<span
+                            class="am-badge am-badge-secondary am-margin-right am-fr">{{$count['users']}}</span></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="am-panel am-panel-default admin-sidebar-panel">
+            <div class="am-panel-bd">
+                <p><span class="am-icon-bookmark"></span> 思考</p>
+                <p>时光静好，与君语；细水流年，与君同。—— Holy</p>
+            </div>
+        </div>
+
+        <div class="am-panel am-panel-default admin-sidebar-panel">
+            <div class="am-panel-bd">
+                <p><span class="am-icon-tag"></span> 长乐未央</p>
+                <p>黄老师工作室 Create By Holy From 2017-11-01 To 2017-11-31!</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__PUBLIC__/vendor/assets/js/jquery.min.js"></script>
+<script src="__PUBLIC__/vendor/assets/js/amazeui.min.js"></script>
+<script>
+    $(function () {
+//        $(".am-list li a").click(function () {
+//            $(this).addClass('am-active');
+//        })
+    })
+</script>

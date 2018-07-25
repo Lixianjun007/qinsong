@@ -1,0 +1,120 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <title>琴松货运代理商城 - 账号登录</title>
+    <link rel="stylesheet" href="__PUBLIC__/assets/home/css/login.css">
+</head>
+<body class="zh_CN">
+<div class="wrapper">
+    <div class="wrap">
+        <div class="layout_panel">
+            <div class="layout" id="layout">
+                <!--表单输入登录-->
+                <div class="mainbox" id="login-main">
+                    <div class="lgnheader">
+                        <div class="header_tit t_c">
+                            <img src="__PUBLIC__/assets/home/images/favicon.ico" style="height: 80px;width: 80px;">
+                            <h5 class="header_tit_txt" id="login-title">帐号登录</h5>
+                        </div>
+                    </div>
+                    <div class="tabs-con tabs_con now" data-con="pwd">
+                        <div>
+                            <div class="login_area">
+                                <div class="loginbox c_b">
+                                    <form action="__SELF__" method="post">
+                                        <div class="lgn_inputbg c_b login-panel pwdLogin">
+
+                                            <label id="region-code" class="labelbox login_user c_b">
+                                                <input class="item_account" type="text" name="email"
+                                                       placeholder="邮箱/手机号码/用户名" minlength="3" required>
+                                            </label>
+
+                                            <label class="labelbox pwd_panel c_b">
+                                                <input type="password" placeholder="密码" name="password" required minlength="6">
+                                            </label>
+                                        </div>
+
+                                        <div class="btns_bg">
+                                            <input class="btnadpt btn_orange" type="submit" value="登录">
+                                        </div>
+                                    </form>
+                                    <div class="other_panel clearfix">
+                                        <div class="reverse">
+                                            <div class="n_links_area" id="custom_display_64">
+                                                <a href="http://qinsongc.net/shop.php{{:U('Customer/register')}}">立即注册</a>
+                                                <span>|</span>
+                                                <a class="outer-link"
+                                                   href="javascript:;">忘记密码？</a>
+                                            </div>
+                                            <!-- 其他登录方式 s -->
+                                            <div style="display: block;" class="other_login_type sns-login-container"
+                                                 id="custom_display_16">
+                                                <fieldset class="oth_type_tit">
+                                                    <legend align="center" class="oth_type_txt">其他方式登录</legend>
+                                                </fieldset>
+                                                <div class="oth_type_links">
+                                                    <a class="icon_type btn_qq sns-login-link" data-type="qq"
+                                                       href=""
+                                                       title="QQ登录" target="_blank"><i
+                                                            class="btn_sns_icontype icon_default_qq"></i></a>
+                                                    <a class="icon_type btn_weibo sns-login-link" data-type="weibo"
+                                                       href=""
+                                                       title="微博登录" target="_blank"><i
+                                                            class="btn_sns_icontype icon_default_weibo"></i></a>
+                                                    <a class="icon_type btn_alipay sns-login-link" data-type="alipay"
+                                                       href=""
+                                                       title="支付宝登录" target="_blank"><i
+                                                            class="btn_sns_icontype icon_default_alipay"></i></a>
+                                                </div>
+                                            </div>
+                                            <!-- 其他登录方式 e -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="custom_display_4" class="n-footer">
+        <div class="nf-link-area clearfix">
+            <ul class="lang-select-list">
+                <li><a href="javascript:void(0)" data-lang="zh_CN" class="lang-select-li current">简体</a>|</li>
+                <li><a href="" data-lang="zh_TW" class="lang-select-li">繁体</a>|</li>
+                <li><a href="" data-lang="en" class="lang-select-li">English</a>|</li>
+                <li><a href="" target="_blank">常见问题</a></li>
+            </ul>
+        </div>
+        <p class="nf-intro">
+            长乐未央公司版权所有-鄂ICP备10046444-
+            <a class="beian-record-link" target="_blank" href="">
+                <span><img src="https://account.xiaomi.com/static/res/9204d06/account-static/respassport/acc-2014/img/ghs.png"></span>
+                鄂公网安备11010802020134号
+            </a>
+            -鄂ICP证110507号
+        </p>
+    </div>
+</div>
+
+<script src="__PUBLIC__/vendor/assets/js/jquery.min.js"></script>
+<script src="__PUBLIC__/vendor/assets/js/amazeui.min.js"></script>
+<script src="__PUBLIC__/vendor/assets/js/app.js"></script>
+<script src="__PUBLIC__/vendor/validate/jquery.validate.js"></script>
+<script src="__PUBLIC__/vendor/validate/localization/messages_zh.js"></script>
+<script>
+    $(function () {
+        $(".am-form").validate({
+            onfocusout: function (element) {
+                $(element).valid();
+            }
+        });
+    });
+</script>
+</body>
+</html>

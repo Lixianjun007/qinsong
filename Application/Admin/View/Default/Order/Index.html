@@ -1,0 +1,149 @@
+<include file="Public/Header" />
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form view-list" action="{{:U('Admin/Order/Index')}}" method="POST">
+            <div class="am-g">
+                <select name="chose_key">
+                    <option value="0" <if condition="isset($param['chose_key']) and $param['chose_key'] eq 0">selected</if>     >所有</option>
+                    <option value="1"  <if condition="isset($param['chose_key']) and $param['chose_key'] eq 1">selected</if>     >单号</option>
+                    <option value="2"  <if condition="isset($param['chose_key']) and $param['chose_key'] eq 2">selected</if>   >姓名</option>
+                    <option value="3"  <if condition="isset($param['chose_key']) and $param['chose_key'] eq 3">selected</if>   >手机</option>
+                    <option value="4"  <if condition="isset($param['chose_key']) and $param['chose_key'] eq 4">selected</if>   >订单号</option>
+                </select>
+                <input type="text" class="am-radius form-keyword" placeholder="{{:L('order_so_keyword_tips')}}" name="keyword" <present name="param['keyword']"> value="{{$param.keyword}}"</present> />
+                <button type="submit" class="am-btn am-btn-secondary am-btn-sm am-radius form-submit">{{:L('common_operation_query')}}</button>
+                <label class="fs-12 m-l-5 c-p fw-100 more-submit">
+                    {{:L('common_more_screening')}}
+                    <input type="checkbox" name="is_more" value="1" id="is_more" <if condition="isset($param['is_more']) and $param['is_more'] eq 1">checked</if> />
+                    <i class="am-icon-angle-down"></i>
+                </label>
+
+                <div class="more-where <if condition="!isset($param['is_more']) or $param['is_more'] neq 1">none</if>">
+                    <select name="status" class="am-radius c-p m-t-10 param-where">
+                        <option value="-1">{{:L('order_view_status_title')}}</option>
+                        <foreach name="order_status_list" item="v">
+                            <option value="{{$v.id}}" <if condition="isset($param['status']) and $param['status'] eq $v['id']">selected</if>>{{$v.name}}</option>
+                        </foreach>
+                    </select>
+                    <select name="department" class="am-radius c-p m-t-10 m-l-5 param-where">
+                        <option value="-1">{{:L('order_view_department_title')}}</option>
+                        <foreach name="order_department_list" item="v">
+                            <option value="{{$key}}" <if condition="isset($param['department']) and $param['department'] eq $key">selected</if>>{{$v}}</option>
+                        </foreach>
+                    </select>
+                    <div class="param-date param-where m-l-5">
+                        <input type="text" name="time_start" readonly="readonly" class="am-radius m-t-10" placeholder="{{:L('common_time_start_name')}}" id="time_start" <if condition="isset($param['time_start'])">value="{{$param.time_start}}"</if>/>
+                        <span>~</span>
+                        <input type="text" readonly="readonly" class="am-radius m-t-10" placeholder="{{:L('common_time_end_name')}}" name="time_end" id="time_end" <if condition="isset($param['time_end'])">value="{{$param.time_end}}"</if>/>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- form end -->
+
+        <!-- operation start -->
+        <div class="am-g m-t-15">
+            <if condition="!IsMobile()">
+                <a href="{{$excel_url}}" class="am-btn am-btn-success am-btn-xs m-l-10 am-icon-file-excel-o am-radius"> {{:L('common_operation_excel_export_name')}}</a>
+            </if>
+        </div>
+        <!-- operation end -->
+
+        <!-- list start -->
+        <table class="am-table am-table-striped am-table-hover am-text-middle m-t-10">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>编号</th>
+                    <th>姓名</th>
+                    <th>手机</th>
+                    <th class="am-hide-sm-only">部门</th>
+                    <th class="am-hide-sm-only">所属船舶</th>
+                    <th>快递信息</th>
+                    <th>订单编号</th>
+                    <th>状态</th>
+                    <th>价格</th>
+                    <th width="100">用户备注</th>
+                    <th class="am-hide-sm-only">添加时间</th>
+                    <th>{{:L('common_operation_name')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+            <if condition="!empty($list)">
+                <foreach name="list" item="v">
+                    <tr id="data-list-{{$v.id}}">
+                        <td><input value="{{$v.id}}" type="checkbox"> </td>
+                        <td>{{$v.id}}</td>
+                        <td>{{$v.user_name}}</td>
+                        <td>{{$v.mobile_phone}}</td>
+                        <td class="am-hide-sm-only">{{$v.department_text}}</td>
+                        <td class="am-hide-sm-only">{{$v.ship_text}}</td>
+                        <td>
+                    <foreach name="v.courier" item="vs">
+                        <div class="m-b-10">
+                            <p class="m-0">{{$vs.number}}</p>
+                            <p class="m-0">{{$vs.goods}}/{{$vs.kg}}kg</p>
+                        </div>
+                    </foreach>
+                    </td>
+                    <td>{{$v.order_number}}</td>
+                    <td>{{$v.status_text}}</td>
+                    <td class="price">{{$v.price}}</td>
+                    <td class="am-hide-sm-only">{{$v.user_note}}</td>
+                    <td class="am-hide-sm-only">{{$v.add_time}}</td>
+                    <td class="view-operation">
+
+                        <a href="{{:U('Admin/Order/SaveInfo', array('id'=>$v['id']))}}" target="_blank">
+                            <button class="am-btn am-btn-default am-btn-xs am-radius">{{:L('common_operation_edit')}}</button>
+                        </a>
+
+                    <if condition="$v.status lt 2">
+                        <button class="am-btn am-btn-default am-btn-xs am-radius submit-close" data-url="{{:U('Admin/Order/Close')}}" data-id="{{$v.id}}">{{:L('common_operation_close')}}</button>
+                    </if>
+                    <if condition="$v.status eq 2">
+                        <button class="am-btn am-btn-default am-btn-xs am-radius submit-success" data-url="{{:U('Admin/Order/Success')}}" data-id="{{$v.id}}">{{:L('common_success_name')}}</button>
+                        </a>
+                    </if>
+                    </td>
+                    </tr>
+                </foreach>
+                <else />
+                <tr><td colspan="10" class="table-no">{{:L('common_not_data_tips')}}</td></tr>
+            </if>
+            </tbody>
+        </table>
+        <!-- list end -->
+
+        <!-- page start -->
+        <if condition="!empty($list)">
+            <button class="am-btn am-btn-default am-btn-xs am-radius alloperate" value="1" id="11">批量已处理</button>
+            <button class="am-btn am-btn-danger am-btn-xs am-radius alloperate" value="2" id="22">批量已支付</button>
+            <button class="am-btn am-btn-warning am-btn-xs am-radius alloperate" value="6" id="66">批量配送中</button>
+            <button class="am-btn am-btn-success am-btn-xs am-radius alloperate" value="3" id="33">批量已完成</button>
+            <button class="am-btn am-btn-secondary am-btn-xs am-radius alloperate" value="4" id="44">批量已取消</button>
+            <button class="am-btn am-btn-default am-btn-xs am-radius alloperate" value="5" id="55">批量已关闭</button>
+            {{$page_html}}
+
+            <div class="am-modal am-modal-confirm" tabindex="-1" id="confirm-success">
+                <div class="am-modal-dialog am-radius">
+                    <div class="am-modal-bd" id="alloperate_text">{{:L('common_success_tips')}}</div>
+                    <div class="am-modal-footer">
+                        <span class="am-modal-btn" data-am-modal-cancel>{{:L('common_operation_cancel')}}</span>
+                        <span class="am-modal-btn" data-am-modal-confirm>{{:L('common_operation_confirm')}}</span>
+                    </div>
+                </div>
+            </div>					
+
+        </if>
+        <!-- page end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+<include file="Public/Footer" />
+<!-- footer end -->
+<!--<js href="__PUBLIC__/Admin/Default/Js/Order.js" />-->

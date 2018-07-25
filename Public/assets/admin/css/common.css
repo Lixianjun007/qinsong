@@ -1,0 +1,30 @@
+.am-icon-check {
+    color: #5eb95e;
+}
+
+.am-icon-close {
+    color: #f37b1d;
+}
+
+.am-icon-check, .am-icon-close {
+    cursor: pointer;
+}
+
+.xChildren {
+    display: none;
+}
+
+.am-icon-male {
+    color: #0e93d7;
+}
+
+.am-icon-female {
+    color: #f37b1d;
+}
+
+.daterangepicker {
+    display: none;
+}
+
+
+

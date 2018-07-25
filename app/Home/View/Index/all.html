@@ -1,0 +1,64 @@
+<extend name="./app/Home/View/Layout/application.html"/>
+
+<block name="content">
+    <div class="clearsH"></div>
+    <div class="all">
+        <ul class="menu">
+            <li><a href="javascript:void(0);">全部商品</a></li>
+            <li><a href="javascript:void(0);" id="list"><i class="fa fa-th"></i></a></li>
+        </ul>
+    </div>
+
+    <div class="products">
+        <volist name="all_products" id="all">
+            <dl>
+                <dt>
+                    <a href="http://qinsongc.net/shop.php{{:U('show',['id'=>$all['id']])}}">
+                        <img class="img-responsive" src="{{$all.thumb}}" alt="{{$all.name}}" style="width: 152px;height: 92px;"/>
+                    </a>
+                </dt>
+                <dd><a href="http://qinsongc.net/shop.php{{:U('show',['id'=>$all['id']])}}">{{$all.name}}</a><span>已售 {{$all.sale_done}}</span>
+                </dd>
+                <dd class="label">库存 {{$all.stock}}</dd>
+                <dd>¥ {{$all.price}}元</dd>
+            </dl>
+        </volist>
+        <div class="clears"></div>
+    </div>
+    <div class="perspective" id="loadMore">
+        <span class="more">查看更多</span>
+    </div>
+</block>
+<block name="js">
+    <script type="text/javascript" src="__PUBLIC__/assets/home/js/all.js"></script>
+    <script>
+        $(function () {
+            var nStart = 2;
+            $('#loadMore').click(function () {
+                var _this = $('.products');
+                if (nStart >= "{{$total}}") {
+                    $(".more").text('没有数据了亲..');
+                    $('#loadMore span').removeClass("success");
+                    return false;
+                } else {
+
+                    $.post("http://qinsongc.net/shop.php{{:U('Index/getMore')}}", {page: nStart}, function (data) {
+                        $.each(data, function (i, item) {
+                            _this.append('<dl>' +
+                                '<dt><a href="/Home/Index/show/id/' + item.id + '"><img class="img-responsive"' +
+                                'src="' + item.thumb + '"' +
+                                'alt="商品图片" style="width: 152px;height: 92px;"/></a></dt>' +
+                                '<dd><a href="#">' + item.name + '</a><span>已售 12</span></dd>' +
+                                '<dd class="label">库存 ' + item.stock + '</dd>' +
+                                '<dd>¥ ' + item.price + '元</dd>' +
+                                '</dl>');
+                        });
+                    });
+                    nStart += 2;
+                    $('#loadMore span').removeClass("success");
+                }
+
+            })
+        })
+    </script>
+</block>

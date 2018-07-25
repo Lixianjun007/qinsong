@@ -1,0 +1,60 @@
+<extend name="./app/Home/View/Layout/application.html"/>
+
+<block name="content">
+    <div class="slick meun">
+        <volist name="galleries" id="gallery">
+            <a href="javascript:void(0);">
+                <img class="img-responsive" src="{{$gallery.img}}" alt="图片一" style="width: 354px;height: 222px;"/>
+            </a>
+        </volist>
+    </div>
+
+    <section class="detail">
+        <hgroup class="product">
+            <h1>{{$product.name}}</h1>
+            <h2>¥ {{$product.price}}元</h2>
+        </hgroup>
+        <p>{{$product.description|htmlspecialchars_decode=###}}</p>
+    </section>
+
+    <section class="operate">
+        <a id="btn-buy" href="javascript:void(0);" data-id="{{$product.id}}">立即购买</a>
+        <span id="btn-cart-plus" href="javascript:void(0);" data-id="{{$product.id}}">加入购物车</span>
+    </section>
+</block>
+
+<block name="js">
+    <script>
+        $(function () {
+            //加入购物车:只是把商品添加到了购物车，不跳转到购物车
+            $("#btn-cart-plus").click(function () {
+                var id = $(this).data('id');
+                $.post("http://qinsongc.net/shop.php{{:U('Cart/add_cart')}}", {id: id}, function (data) {
+                    if (data.status != 1) {
+                        alert(data.info);
+                        location.href = "http://qinsongc.net/shop.php{{:U('Customer/login')}}";
+                    } else {
+                        alert(data.msg);
+                        window.location.reload();
+                        return false;
+                    }
+                });
+                return false;
+            })
+
+            //立即购买,添加商品到购物车并跳转
+            $("#btn-buy").click(function () {
+                var id = $(this).data('id');
+                $.post("http://qinsongc.net/shop.php{{:U('Cart/add_cart')}}", {id: id}, function (data) {
+                    if (data.status != 1) {
+                        alert(data.info);
+                        location.href = "http://qinsongc.net/shop.php{{:U('Customer/login')}}";
+                    } else {
+                        location.href = "http://qinsongc.net/shop.php{{:U('Cart/index')}}";
+                    }
+                });
+                return false;
+            })
+        })
+    </script>
+</block>

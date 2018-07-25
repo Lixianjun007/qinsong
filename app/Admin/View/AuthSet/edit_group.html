@@ -1,0 +1,133 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+
+<block name="content">
+    <div class="admin-content">
+
+        <div class="am-cf am-padding">
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">编辑用户组</strong> /
+                <small>Update Group</small>
+            </div>
+        </div>
+
+        <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-12">
+                <div class="am-tab-panel">
+                    <form class="am-form " action="__SELF__" method="post">
+
+                        <div class="am-g am-margin-top">
+                            <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                用户组名:
+                            </div>
+                            <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                                <input type="hidden" name="id" value="{{$result.id}}"/>
+                                <input type="text" class="am-input-sm" name="title" value="{{$result.title}}"
+                                       placeholder="请输入用户组名">
+                            </div>
+                        </div>
+
+                        <div class="am-g am-margin-top">
+                            <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                权限列表:
+                            </div>
+
+                            <div class="am-u-sm-8 am-u-md-8 am-u-end col-end">
+
+                                <volist name="menus" id="rule">
+
+                                    <div class="am-panel am-panel-default">
+                                        <div class="am-panel-hd">
+                                            <label class="am-checkbox-inline">
+                                                <input type="checkbox" value="{{$rule.id}}" class="rule_one"
+                                                       name="rule_id[]" checked="checked"
+                                                <if condition="in_array($rule['id'],explode(',',$group['rules']) )">
+                                                    checked
+                                                </if>
+                                                >
+                                                <span class="am-badge am-badge-secondary am-text-sm am-radius">{{$rule.title}}</span>
+                                            </label>
+                                        </div>
+                                        <div class="am-panel-bd">
+                                            <volist name="rule.children" id="child">
+
+                                                <div class="am-g am-margin-top">
+                                                    <div class="am-u-sm-4 am-u-md-3 am-text-right p2">
+                                                        <label class="am-checkbox-inline">
+                                                            <input type="checkbox" value="{{$child.id}}"
+                                                                   name="rule_id[]" class="rule_two"
+                                                            <if condition="in_array($child['id'],explode(',',$group['rules']) )"> checked </if>>
+                                                            <span class="am-badge am-badge-success am-radius">{{$child.title}}</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="am-u-sm-8 am-u-md-9 am-u-end col-end p3">
+
+                                                        <volist name="child.child" id="c">
+                                                            <label class="am-checkbox-inline">
+                                                                <input type="checkbox" value="{{$c.id}}"
+                                                                       class="rule_three"
+                                                                       name="rule_id[]"
+                                                                <if condition="in_array($c['id'],explode(',',$group['rules']))">
+                                                                    checked
+                                                                </if>
+                                                                >{{$c.title}}
+                                                            </label>
+                                                        </volist>
+
+                                                    </div>
+                                                </div>
+                                            </volist>
+
+                                        </div>
+                                    </div>
+
+                                </volist>
+                            </div>
+                        </div>
+
+                        <div class="am-margin">
+                            <button type="submit" class="am-btn am-btn-primary">保存修改</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script>
+        $(function () {
+            $('.rule_one').click(function () {
+                var checked = $(this).prop('checked');
+                $(this).parents('.am-panel-hd').next().find('input').prop('checked', checked);
+            });
+
+            $('.rule_two').click(function () {
+                var checked = $(this).prop('checked');
+                //他的三级全部选中
+                $(this).parents('.p2').next().find('input').prop('checked', checked);
+
+                //获取所有的二级选中的长度
+                var length2_checked = $(this).parents('.am-panel').find('.rule_two:checked').length;
+
+                //只要所有的二级有一个被选中，一级自动被选中
+                if (length2_checked > 0) {
+                    $(this).parents('.am-panel').find(".rule_one").prop('checked', true);
+                } else {
+                    $(this).parents('.am-panel').find(".rule_one").prop('checked', false);
+                }
+
+            });
+
+            $(".rule_three").click(function () {
+                // 如果有三级一个选中，自动选择二级和一级
+                var length3_checked = $(this).parents('.p3').find("input:checked").length;
+                if (length3_checked > 0) {
+                    $(this).parents('.p3').prev().find(".rule_two").prop('checked', true);
+                    $(this).parents('.am-panel').find(".rule_one").prop('checked', true);
+                }
+
+            })
+        })
+    </script>
+</block>

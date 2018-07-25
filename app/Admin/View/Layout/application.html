@@ -1,0 +1,61 @@
+<!doctype html>
+<html class="no-js fixed-layout">
+<head>
+    <title>武汉美食城|武汉PHP培训|长乐教育</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>长乐美食城后台管理系统</title>
+    <meta name="description" content="武汉PHP|武汉PHP培训|长乐教育|武汉美食">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="icon" type="image/png" href="__PUBLIC__/vendor/assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="__PUBLIC__/vendor/assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+    <link rel="stylesheet" href="__PUBLIC__/vendor/assets/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/vendor/assets/css/admin.css">
+    <link rel="stylesheet" href="__PUBLIC__/assets/admin/css/common.css">
+    <link rel="stylesheet" href="__PUBLIC__/vendor/nprogress/nprogress.css">
+
+    <block name="css"></block>
+</head>
+<body>
+
+<div id="globalLoading" class="global-loading">
+    <div class="global-loading-logo">
+        <div id="globalLoadingAnim" class="global-loading-anim"></div>
+    </div>
+</div>
+<script src="__PUBLIC__/assets/admin/js/loading.js"></script>
+
+<script>
+    window.onload = function () {
+        $("#globalLoading").fadeOut();
+    }
+</script>
+
+<include file="./app/Admin/View/Layout/_header.html"/>
+
+<div class="am-cf admin-main">
+    <!-- sidebar start -->
+    <include file="./app/Admin/View/Layout/_sidebar.html"/>
+    <!-- sidebar end -->
+
+    <!-- content start -->
+    <block name="content"></block>
+    <!-- content end -->
+
+</div>
+
+<a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu"
+   data-am-offcanvas="{target: '#admin-offcanvas'}"></a>
+
+<script src="__PUBLIC__/vendor/assets/js/jquery.min.js"></script>
+<script src="__PUBLIC__/vendor/assets/js/amazeui.min.js"></script>
+<script src="__PUBLIC__/vendor/assets/js/app.js"></script>
+<script src="__PUBLIC__/vendor/nprogress/nprogress.js"></script>
+<script src="__PUBLIC__/assets/admin/js/common.js"></script>
+<block name="js"></block>
+</body>
+</html>

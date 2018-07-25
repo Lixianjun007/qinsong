@@ -1,0 +1,277 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+
+<block name="content">
+    <div class="admin-content">
+        <div class="admin-content-body">
+            <div class="am-cf am-padding am-padding-bottom-0">
+                <div class="am-fl am-cf">
+                    <strong class="am-text-primary am-text-lg">新增商品</strong> /
+                    <small>Create Product</small>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-12">
+                    <form class="am-form" action="http://qinsongc.net/shop.php{{:U('add')}}" method="post" enctype="multipart/form-data">
+
+                        <div class="am-tabs am-margin" data-am-tabs>
+                            <ul class="am-tabs-nav am-nav am-nav-tabs">
+                                <li class="am-active"><a href="#tab1">通用信息</a></li>
+                                <li><a href="#tab2">商品介绍</a></li>
+                                <li><a href="#tab3">商品相册</a></li>
+                            </ul>
+
+                            <div class="am-tabs-bd">
+                                <div class="am-tab-panel am-fade am-in am-active" id="tab1">
+
+                                    <div class="am-g am-margin-top">
+                                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                            所属类别
+                                        </div>
+                                        <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                                            <select name="category_id">
+                                                <volist name="categories" id="category">
+                                                    <option value="{{$category.id}}" disabled>
+                                                        {{$category.name}}
+                                                        <volist name="category.children" id="cate">
+                                                    <option value="{{$cate.id}}">
+                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--{{$cate.name}}
+                                                    </option>
+                                                </volist>
+                                                </option>
+                                                </volist>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-g am-margin-top">
+                                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                            商品名称
+                                        </div>
+                                        <div class="am-u-sm-8 am-u-md-4">
+                                            <input type="text" class="am-input-sm" name="name">
+                                        </div>
+                                        <div class="am-hide-sm-only am-u-md-6">*必填，不可重复</div>
+                                    </div>
+
+                                    <div class="am-g am-margin-top">
+                                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                            单价
+                                        </div>
+                                        <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                                            <input type="text" class="am-input-sm" name="price" value="">
+                                        </div>
+                                    </div>
+
+                                    <div class="am-g am-margin-top">
+                                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                            库存
+                                        </div>
+                                        <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                                            <input type="text" class="am-input-sm" name="stock" value="-1">
+                                        </div>
+                                    </div>
+
+                                    <div class="am-g am-margin-top">
+                                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                            缩略图
+                                        </div>
+
+                                        <div class="am-u-sm-8 am-u-md-8 am-u-end col-end">
+                                            <div class="am-form-group am-form-file">
+                                                <button type="button" class="am-btn am-btn-success am-btn-sm new_thumb">
+                                                    <i class="am-icon-cloud-upload" id="loading"></i> 上传缩略图
+                                                </button>
+                                                <div id="upload_one" style="display: none;"></div>
+                                                <div id="view_one">
+                                                    <input type="hidden" name="thumb" value="">
+                                                    <img src="" class="img-responsive"
+                                                         style="margin-top:5px;max-height:150px;max-width: 150px;">
+                                                </div>
+                                            </div>
+
+                                            <hr data-am-widget="divider" style="" class="am-divider am-divider-dashed"/>
+
+                                            <div>
+                                                <img src="" id="img_show" style="max-height: 200px;">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-g am-margin-top">
+                                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                            上架
+                                        </div>
+                                        <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                                            <label class="am-radio-inline">
+                                                <input type="radio" value="1" name="is_onsale" checked> 是
+                                            </label>
+                                            <label class="am-radio-inline">
+                                                <input type="radio" value="0" name="is_onsale"> 否
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-g am-margin-top">
+                                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                            发布日期
+                                        </div>
+                                        <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                                            <div class="am-form-group am-form-icon">
+                                                <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd', viewMode: 'years'}">
+                                                    <input type="text" class="am-form-field" name="created_at" placeholder="点击选择日期">
+                                                    <span class="am-input-group-btn am-datepicker-add-on">
+                                                        <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span></button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-g am-margin-top">
+                                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                            加入推荐
+                                        </div>
+                                        <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                                            <input type="hidden" name="is_top" value="0">
+                                            <input type="hidden" name="is_recommend" value="0">
+                                            <input type="hidden" name="is_hot" value="0">
+                                            <input type="hidden" name="is_new" value="0">
+
+                                            <div class="am-btn-group" data-am-button="">
+                                                <label class="am-btn am-btn-default am-btn-xs am-round">
+                                                    <input type="checkbox" name="is_top" value="1"> 置顶
+                                                </label>
+                                                <label class="am-btn am-btn-default am-btn-xs am-round">
+                                                    <input type="checkbox" name="is_recommend" value="1"> 推荐
+                                                </label>
+                                                <label class="am-btn am-btn-default am-btn-xs am-round">
+                                                    <input type="checkbox" name="is_hot" value="1"> 热销
+                                                </label>
+                                                <label class="am-btn am-btn-default am-btn-xs am-round">
+                                                    <input type="checkbox" name="is_new" value="1"> 新品
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="am-tab-panel am-fade" id="tab2">
+                                    <div class="am-g am-margin-top-sm">
+                                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                            描述 （文字请手写）
+                                        </div>
+                                        <div class="am-u-sm-8 am-u-md-10">
+                                            <script id="container" name="description" type="text/plain"></script>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="am-tab-panel am-fade" id="tab3">
+                                    <div class="am-g am-margin-top">
+                                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                                            商品相册
+                                        </div>
+
+                                        <div class="am-u-sm-8 am-u-md-8 am-u-end col-end">
+                                            <div class="am-form-group am-form-file">
+                                                <div id="upload_more"></div>
+                                                <div id="view_more"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="am-margin">
+                            <button type="submit" class="am-btn am-btn-primary am-radius">提交保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer class="admin-content-footer">
+            <hr>
+            <p class="am-padding-left">© 2014 AllMobilize, Inc. Licensed under MIT license.</p>
+        </footer>
+    </div>
+</block>
+<block name="js">
+    <script src="__PUBLIC__/vendor/bootstrapextend/js/bootstrap.extend.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/vendor/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/vendor/ueditor/ueditor.all.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            //启动百度编辑器
+            var ue = UE.getEditor('container');
+            ue.ready(function () {
+                //获取纯文本内容
+                var txt = ue.getContentTxt();
+            });
+
+            //给上传图片按钮绑定事件
+            $('.new_thumb').click(function () {
+                $("#file_upload_1-button").click();
+            })
+
+            //上传单张
+            $('#upload_one').Huploadify({
+                uploader: 'http://qinsongc.net/shop.php{{:U("Admin/Uploadfile/upload")}}',
+//                uploader: 'http://up.qiniu.com?token={{$upToken}}',  //使用js直接上传到七牛
+                fileTypeExts: '*.gif;*.jpg;*.jpeg;*.png;*.bmp',
+                //fileSizeLimit:{:C('UPLOAD_IMAGE_SIZE')}*1024,
+                buttonText: '上 传 图 片',
+                onUploadComplete: function (file, data) {
+                    data = $.parseJSON(data);
+                    $('#view_one img').attr('src', data.real_path);
+                    $('#view_one input').attr('value', data.real_path);
+
+//                    $('#view_one img').attr('src', 'http://oi6a6qhed.bkt.clouddn.com/' + data.key);
+//                    $('#view_one input').attr('value', 'http://oi6a6qhed.bkt.clouddn.com/' + data.key);
+
+                }
+            });
+
+            //上传多张图片
+            $('#upload_more').Huploadify({
+                uploader: 'http://qinsongc.net/shop.php{{:U("Admin/Uploadfile/upload")}}',
+                fileTypeExts: '*.gif;*.jpg;*.jpeg;*.png;*.bmp',
+//                fileSizeLimit:{:C('UPLOAD_IMAGE_SIZE')}*1024,
+                buttonText: '上传多张图片',
+                onUploadComplete: function (file, data) {
+                    var data = $.parseJSON(data);
+                    //console.log(data);
+                    if (data.error == 1) {
+                        alertMessager(data.message);
+                    } else {
+                        var input = $('#view_more input');
+                        var new_img = '<span class="img-box">' +
+                            '<img class="img img-responsive" width="80" src="' + data.real_path + '">' +
+                            '<a class="label label-danger remove-picture" href="javascript:void(0);" >删除</a>' +
+                            '<input type="hidden" name="gallery[]" value="' + data.real_path + '">' +
+                            '</span>';
+                        $('#view_more').append(new_img);
+                    }
+                }
+            });
+
+            //删除图片 <i class="glyphicon glyphicon-remove-sign remove-picture"></i>
+            $('#view_more').on('click', '.remove-picture', function () {
+                var ready_for_remove_id = $(this).closest('.img-box').find('img').attr('data-id'); //获取待删除的图片ID
+                if (!ready_for_remove_id) {
+                    alertMessager('错误');
+                }
+                var current_picture_ids = $('#view_more input').val().split(","); //获取当前图集以逗号分隔的ID并转换成数组
+                current_picture_ids.remove(ready_for_remove_id); //从数组中删除待删除的图片ID
+                $('#view_more input').val(current_picture_ids.join(',')) //删除后覆盖原input的值
+                $(this).closest('.img-box').remove(); //删除图片预览图
+            });
+        })
+    </script>
+</block>

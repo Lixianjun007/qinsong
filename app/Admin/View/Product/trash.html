@@ -1,0 +1,202 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+<block name="css">
+    <style>
+        .am-icon-heart {
+            color: red;
+        }
+    </style>
+</block>
+<block name="content">
+    <div class="admin-content">
+        <div class="admin-content-body">
+            <div class="am-cf am-padding am-padding-bottom-0">
+                <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">回收站列表</strong> /
+                    <small>Product Trash</small>
+                </div>
+            </div>
+
+            <hr>
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-6">
+                    <div class="am-btn-toolbar">
+                        <div class="am-btn-group am-btn-group-xs">
+                            <button href="javascript:;" class="am-btn am-btn-success back_more"><span
+                                    class="am-icon-share"></span> 还原
+                            </button>
+                            <button type="button" class="am-btn am-btn-warning del_all"><span
+                                    class="am-icon-trash-o"></span> 删除
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-g">
+                <div class="am-u-sm-12">
+                    <table class="am-table am-table-striped am-table-hover table-main">
+                        <thead>
+                        <tr>
+                            <th class="table-check"><input type="checkbox" id="check_all"/></th>
+                            <th class="table-id">ID</th>
+                            <th class="table-title">名称</th>
+                            <th class="table-title">缩略图</th>
+                            <th class="table-type">类别</th>
+                            <th class="table-type">单价</th>
+                            <th class="table-type">库存</th>
+                            <th class="table-date am-hide-sm-only">发布日期</th>
+                            <th class="table-set">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <volist name="products" id="product">
+                            <tr data-id="{{$product.id}}">
+                                <td><input type="checkbox" class="checked_id" name="checked_id[]"
+                                           value="{{$product.id}}"/></td>
+                                <td>{{$product.id}}</td>
+                                <td>{{$product.name}}</td>
+                                <td>
+                                    <img src="{{$product.thumb}}" alt=""
+                                         style="width: 90px;height: 50px;">
+                                </td>
+                                <td>{{$product.category.name}}</td>
+                                <td class="am-hide-sm-only">{{$product.price}}</td>
+                                <td class="am-hide-sm-only">
+                                    <input type="text" value="{{$product.stock}}" class="stock" style="width: 40px">
+                                </td>
+                                <td>{{$product.created_at|date="Y-m-d", ###}}</td>
+                                <td>
+                                    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <a href="javascript:;"
+                                               class="am-btn am-btn-default am-btn-xs am-text-secondary back"><span
+                                                    class="am-icon-share"></span> 还原
+                                            </a>
+                                            <a href="javascript:;"
+                                               class="delete am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">
+                                                <span class="am-icon-trash-o"></span> 删除
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </volist>
+
+                        </tbody>
+                    </table>
+                    <div class="am-cf">
+                        共 {{$count['trash']}} 条记录
+                        <div class="am-fr">
+                            <ul class="am-pagination">
+                                {{$pages}}
+                            </ul>
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+        </div>
+
+        <footer class="admin-content-footer">
+            <hr>
+            <p> &nbsp;&nbsp;Copyright © 2017. Made With <i class="am-icon am-icon-heart"></i> By Holy. All
+                Rights Reserved.
+            </p>
+        </footer>
+    </div>
+</block>
+
+<block name="js">
+    <script>
+        $(function () {
+            //还原单条
+            $('.back').click(function () {
+                if (confirm('确定要还原此商品么？')) {
+                    var id = $(this).parents('tr').data('id');
+                    $.post("http://qinsongc.net/shop.php{{:U('back_one')}}", {id: id}, function (data) {
+                        if (data.status == 1) {
+                            alert(data.msg);
+                            $("tr[data-id='" + id + "']").fadeOut(400);
+                        } else {
+                            alert(data.msg);
+                            return false;
+                        }
+                    })
+                    return false;
+                }
+            });
+
+            //还原多条
+            $('.back_more').click(function () {
+                var length = $(".checked_id:checked").length;
+                if (length == 0) {
+                    alert('您至少要选中一条记录~');
+                    return false;
+                }
+
+                if (confirm('确定要还原此商品么?')) {
+                    var checked_id = $(".checked_id:checked").serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "http://qinsongc.net/shop.php{{:U('back_all')}}",
+                        data: checked_id,
+                        success: function (data) {
+                            if (data.status == 1) {
+                                alert(data.msg);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }
+                return false;
+            })
+
+            //ajax彻底删除单条
+            $('.delete').click(function () {
+                if (confirm('确定要彻底删除么？')) {
+                    var id = $(this).parents('tr').data('id');
+                    $.post("http://qinsongc.net/shop.php{{:U('delete_one')}}", {id: id}, function (data) {
+                        if (data.status == 1) {
+                            alert(data.msg);
+                            $("tr[data-id='" + id + "']").fadeOut(400);
+                        } else {
+                            alert(data.msg);
+                            return false;
+                        }
+                    })
+                    return false;
+                }
+            });
+
+            //全选/反选
+            $("#check_all").click(function () {
+                $(':checkbox').prop("checked", this.checked);
+            })
+
+            //彻底删除多条
+            $('.del_all').click(function () {
+                var length = $(".checked_id:checked").length;
+                if (length == 0) {
+                    alert('您至少要选中一条记录~');
+                    return false;
+                }
+
+                if (confirm('确定要彻底删除么?')) {
+                    var checked_id = $(".checked_id:checked").serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "http://qinsongc.net/shop.php{{:U('delete_more')}}",
+                        data: checked_id,
+                        success: function (data) {
+                            if (data.status == 1) {
+                                alert(data.msg);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }
+                return false;
+            });
+        })
+    </script>
+</block>

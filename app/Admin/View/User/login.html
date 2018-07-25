@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>长乐美食城后台登录</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="__PUBLIC__/vendor/assets/i/favicon.png">
+    <link rel="stylesheet" href="__PUBLIC__/vendor/assets/css/amazeui.min.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+
+        .am-icon-heart {
+            color: red;
+        }
+
+        #capital {
+            color: #F90;
+            padding: 2px;
+            position: absolute;
+        }
+
+        .yanzhengma {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="am-g">
+        <h1>长乐美食城</h1>
+        <p>Integrated Development Environment<br/>代码编辑，代码生成，界面设计，调试，编译</p>
+    </div>
+    <hr/>
+</div>
+<div class="am-g">
+    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+        <h2>管理员登录</h2>
+        <form action="__SELF__" method="post" class="am-form">
+            <div class="am-form-group am-form-icon am-form-feedback">
+                <label class="am-form-label" for="email">用户名/邮箱/手机号: </label>
+                <input type="text" id="email" name="email" class="am-form-field" placeholder="用户名/邮箱/手机号"
+                       minlength="3" required autofocus>
+            </div>
+
+
+            <div class="am-form-group am-form-icon am-form-feedback">
+                <label class="am-form-label" for="password">密码: </label>
+                <input type="password" name="password" id="password" class="am-form-field" placeholder="输入你的密码">
+                <i class="am-icon-eye-slash" id="ico" onclick="show()"></i>
+                <div id="capital" style="display:none;">大写锁定已开启</div>
+            </div>
+
+
+            <div class="am-form-group am-form-icon am-form-feedback yanzhengma">
+                <label class="am-form-label" for="code">验证码: </label>
+
+                <div class="am-g doc-am-g">
+                    <div class="am-u-sm-9">
+                        <input type="text" name="code" id="code" class="am-form-field" placeholder="输入你的验证码"
+                               required remote="http://qinsongc.net/shop.php{{:U('check_verify')}}">
+                    </div>
+                    <div class="am-u-sm-3">
+                        <img src="http://qinsongc.net/shop.php{{:U('verify')}}" class="verify"
+                             onclick="this.src='http://qinsongc.net/shop.php{{:U(\'verify\')}}?'+ Math.random();">
+                    </div>
+                </div>
+            </div>
+
+            <label for="remember-me">
+                <input id="remember-me" type="checkbox" name="remember" value="1">
+                记住十万年
+            </label>
+            <br>
+
+            <hr>
+            <div class="am-cf">
+                <input type="submit" value="Login" class="am-btn am-btn-secondary am-btn-sm am-fl">
+                <a href="http://qinsongc.net/shop.php{{:U('User/email')}}" class="am-btn am-btn-default am-btn-sm am-fr">忘记密码 ^_^?</a>
+            </div>
+        </form>
+        <hr>
+        <!--<a href="http://qinsongc.net/shop.php{{:U('User/register')}}" class="am-btn am-btn-success am-btn-sm am-fr">您还没有账号，请先注册^_^?</a>-->
+        <p>Copyright © 2017. Made With <i class="am-icon am-icon-heart"></i> By Holy. All
+            Rights Reserved.
+        </p>
+
+    </div>
+</div>
+
+<script src="__PUBLIC__/vendor/assets/js/jquery.min.js"></script>
+<script src="__PUBLIC__/vendor/assets/js/amazeui.min.js"></script>
+<script src="__PUBLIC__/vendor/assets/js/app.js"></script>
+<script src="__PUBLIC__/vendor/validate/jquery.validate.js"></script>
+<script src="__PUBLIC__/vendor/validate/localization/messages_zh.js"></script>
+<script src="__PUBLIC__/assets/admin/js/login.js"></script>
+
+<script>
+    /*实现密码显示与隐藏设置 */
+    function show() {
+        var aa=document.getElementById("ico").title;
+        if(aa == "隐藏密码"){
+            document.getElementById("password").type="password";
+            document.getElementById("ico").title = "显示密码";
+        }else{
+            document.getElementById("ico").title = "隐藏密码";
+            document.getElementById("password").type="text";
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+<block name="css">
+    <style>
+        .am-icon-heart {
+            color: red;
+        }
+    </style>
+</block>
+<block name="content">
+    <div class="admin-content">
+        <div class="admin-content-body">
+            <div class="am-cf am-padding am-padding-bottom-0">
+                <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品列表</strong> /
+                    <small>Product List</small>
+                </div>
+            </div>
+            <hr>
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-6">
+                    <div class="am-btn-toolbar">
+                        <div class="am-btn-group am-btn-group-xs">
+                            <a href="http://qinsongc.net/shop.php{{:U('Product/add')}}" class="am-btn am-btn-default"><span
+                                    class="am-icon-plus"></span> 新增
+                            </a>
+                            <button type="button" class="am-btn am-btn-default del_all"><span
+                                    class="am-icon-trash-o"></span> 删除
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <form>
+                    <div class="am-u-sm-12 am-u-md-3">
+                        <div class="am-form-group">
+                            <select name="category_id" class="data-am-selected">
+                                <option value="">所有分类</option>
+                                <volist name="categories" id="category">
+                                    <option value="{{$category.id}}" disabled>
+                                        {{$category.name}}
+                                    </option>
+
+                                    <volist name="category.children" id="child">
+                                        <option value="{{$child.id}}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--{{$child.name}}
+                                        </option>
+                                    </volist>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-u-sm-12 am-u-md-3">
+                        <div class="am-input-group am-input-group-sm">
+                            <input type="text" name="name" class="am-form-field">
+                            <span class="am-input-group-btn">
+                            <button class="am-btn am-btn-default" type="submit">搜索</button>
+                            <a href="http://qinsongc.net/shop.php{{:U('index')}}" class="am-btn am-btn-default">重置</a>
+                        </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="am-g">
+                <div class="am-u-sm-12">
+                    <table class="am-table am-table-striped am-table-hover table-main">
+                        <thead>
+                        <tr>
+                            <th class="table-check"><input type="checkbox" id="check_all"/></th>
+                            <th class="table-id">ID</th>
+                            <th class="table-title">名称</th>
+                            <th class="table-title">缩略图</th>
+                            <th class="table-type">类别</th>
+                            <th class="table-type">单价</th>
+                            <th class="table-type">库存</th>
+                            <th class="table-type">置顶</th>
+                            <th class="table-type">新品</th>
+                            <th class="table-type">热销</th>
+                            <th class="table-type">推荐</th>
+                            <th class="table-type">上架</th>
+                            <th class="table-author am-hide-sm-only">排序</th>
+                            <th class="table-date am-hide-sm-only">发布日期</th>
+                            <th class="table-set">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <volist name="products" id="product">
+                            <tr data-id="{{$product.id}}">
+                                <td><input type="checkbox" class="checked_id" name="checked_id[]"
+                                           value="{{$product.id}}"/></td>
+                                <td>{{$product.id}}</td>
+                                <td>{{$product.name}}</td>
+                                <td>
+                                    <img src="{{$product.thumb}}" alt=""
+                                         style="width: 90px;height: 50px;">
+                                </td>
+                                <td>{{$product.category.name}}</td>
+                                <td class="am-hide-sm-only">{{$product.price}}</td>
+                                <td class="am-hide-sm-only">
+                                    <input type="text" value="{{$product.stock}}" class="stock" style="width: 40px;">
+                                </td>
+
+                                <foreach name="datas" item="data">
+                                    <td>
+                                        {{:is_something($product, $data)}}
+                                    </td>
+                                </foreach>
+
+                                <td>
+                                    <input type="text" class="am-input-sm sort_order" style="width: 40px;"
+                                           value="{{$product.sort_order}}">
+                                </td>
+                                <td>{{$product.created_at|date="Y-m-d", ###}}</td>
+                                <td>
+                                    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <a href="http://qinsongc.net/shop.php{{:U('edit', ['id'=>$product[id]])}}"
+                                               class="am-btn am-btn-default am-btn-xs am-text-secondary"><span
+                                                    class="am-icon-pencil-square-o"></span> 编辑
+                                            </a>
+                                            <a href="javascript:;"
+                                               class="delete am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">
+                                                <span class="am-icon-trash-o"></span> 删除
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </volist>
+
+                        </tbody>
+                    </table>
+                    <div class="am-cf">
+                        共 {{$count['products']}} 条记录
+                        <div class="am-fr">
+                            <ul class="am-pagination">
+                                <li class="am-disabled"><a href="javascript:;">«</a></li>
+                                {{$pages}}
+                                <li><a href="javascript:;">»</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="admin-content-footer">
+            <hr>
+            <p> &nbsp;&nbsp;Copyright © 2017. Made With <i class="am-icon am-icon-heart"></i> By Holy. All
+                Rights Reserved.
+            </p>
+        </footer>
+    </div>
+</block>
+
+<block name="js">
+    <script>
+        $(function () {
+            //ajax删除单条
+            $('.delete').click(function () {
+                if (confirm('确定要移至回收站么？')) {
+                    var id = $(this).parents('tr').data('id');
+                    $.post("http://qinsongc.net/shop.php{{:U('delete_product')}}", {id: id}, function (data) {
+                        if (data.status == 1) {
+                            alert(data.msg);
+                            $("tr[data-id='" + id + "']").fadeOut(400);
+                        } else {
+                            alert(data.msg);
+                            return false;
+                        }
+                    })
+                    return false;
+                }
+            });
+
+            //全选/反选
+            $("#check_all").click(function () {
+                $(':checkbox').prop("checked", this.checked);
+            })
+
+            //删除多条
+            $('.del_all').click(function () {
+                var length = $(".checked_id:checked").length;
+                if (length == 0) {
+                    alert('您至少要选中一条记录~');
+                    return false;
+                }
+
+                if (confirm('确定要移至回收站么?')) {
+                    var checked_id = $(".checked_id:checked").serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "http://qinsongc.net/shop.php{{:U('delete_all')}}",
+                        data: checked_id,
+                        success: function (data) {
+                            if (data.status == 1) {
+                                alert(data.msg);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }
+                return false;
+            });
+
+            //排序
+            $(".sort_order").change(function () {
+                var info = {
+                    id: $(this).parents('tr').data('id'),
+                    sort_order: $(this).val()
+                }
+
+                $.post("http://qinsongc.net/shop.php{{:U('sort_order')}}", info, function () {
+                    window.location.reload();
+                })
+                return false;
+            })
+
+
+            //改变库存
+            $(".stock").change(function () {
+                var info = {
+                    id: $(this).parents('tr').data('id'),
+                    stock: $(this).val()
+                }
+
+                $.post("http://qinsongc.net/shop.php{{:U('stock')}}", info);
+                return false;
+            })
+
+            //改变属性
+            $('.change_attr').click(function () {
+                var info = {
+                    id: $(this).parents('tr').data('id'),
+                    attr: $(this).attr('data-attr')
+                }
+                var _this = $(this);
+                $.post("http://qinsongc.net/shop.php{{:U('change_attr')}}", info, function () {
+                    _this.toggleClass('am-icon-check am-icon-close');
+                })
+                return false;
+            })
+        })
+    </script>
+</block>

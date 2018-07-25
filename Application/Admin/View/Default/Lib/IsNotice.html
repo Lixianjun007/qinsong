@@ -1,0 +1,12 @@
+<!-- 是否通知 开始 -->
+<div class="am-form-group">
+	<label>{{:L('order_is_notice_title')}}</label>
+	<div>
+		<foreach name="order_is_notice_list" item="v">
+			<label class="am-radio-inline m-r-10">
+				<input type="radio" name="is_notice" value="{{$v.id}}" <if condition="isset($data['is_notice']) and $data['is_notice'] eq $v['id']">checked="checked"<else /><if condition="!isset($data['is_notice']) and isset($v['checked']) and $v['checked'] eq true">checked="checked"</if></if> data-am-ucheck /> {{$v.name}}
+			</label>
+		</foreach>
+	</div>
+</div>
+<!-- 是否通知 结束 -->

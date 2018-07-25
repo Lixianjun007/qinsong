@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <title>琴松货运代理商城</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/assets/home/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/assets/home/css/common.css"/>
+    <block name="css"></block>
+</head>
+<body>
+
+<div class="logo">
+    <h1><a href="http://127.0.0.1/shopcms/Home/Index/index.html"><img class="img-responsive" src="__PUBLIC__/assets/home/images/favicon.ico"
+                                  alt="琴松货运代理商城"/></a></h1>
+    <h3>琴松货运代理商城</h3>
+
+    <div class="clears"></div>
+</div>
+
+<block name="content"></block>
+
+<gt name="product_num" value="0">
+    <a href="http://qinsongc.net/shop.php{{:U('Cart/index')}}" id="btn-cart"><i class="fa fa-shopping-cart"></i><span>{{$product_num}}</span></a>
+</gt>
+<a href="javascript:;" id="to_top" onclick="goTop();return false;">返回</a>
+
+<include file="./app/Home/View/Layout/_footer.html"/>
+
+<script type="text/javascript" src="__PUBLIC__/assets/home/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/vendor/slick/slick.js"></script>
+<script type="text/javascript" src="__PUBLIC__/assets/home/js/index.js"></script>
+<block name="js"></block>
+
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1271640575'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1271640575%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+</body>
+</html>
+

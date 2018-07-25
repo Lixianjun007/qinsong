@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <title>琴松货运代理商城-订单确认页</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/assets/home/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/assets/home/css/confirm.css"/>
+</head>
+
+<body>
+<main class="order-main">
+    <div class="box box1">
+        <div class="p1"><span class="fa fa-check-circle"></span>&nbsp;&nbsp;<span>订单提交成功</span></div>
+    </div>
+    <table class="address_info">
+        <caption>收货信息</caption>
+        <tr>
+            <td>姓名</td>
+            <td>{{$address.name}}</td>
+            <td>电话</td>
+            <td>{{$address.tel}}</td>
+        </tr>
+        <tr>
+            <td>地址</td>
+            <td colspan="3">{{$address.address}}</td>
+        </tr>
+    </table>
+
+    <table class="mar-t">
+        <caption>订单信息</caption>
+
+            <tr>
+                <td>订单号</td>
+                <td colspan="2">{{$orders['order_no']}}</td>
+                <td>总金额</td>
+                <td colspan="2"><span class="color">￥{{$orders['total_price']}}元</span></td>
+            </tr>
+            <volist name="order_products" id="p">
+                <tr>
+                    <td style="padding:1px;">
+                        <img class="img-responsive" src="{{$p.product.thumb}}" alt="产品图片">
+                    </td>
+                    <td>{{$p.product.name}}</td>
+                    <td>数量</td>
+                    <td>{{$p.number}}</td>
+                    <td>单价</td>
+                    <td>￥{{$p.product.price}}元</td>
+                </tr>
+            </volist>
+    </table>
+    <footer>
+        <a href="#"><input class="submit" type="submit" value="立即支付"/></a>
+    </footer>
+</main>
+</body>
+</html>

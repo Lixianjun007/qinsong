@@ -1,0 +1,242 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+
+<block name="css">
+    <link rel="stylesheet" href="__PUBLIC__/vendor/nestable/jquery.nestable.css">
+</block>
+
+<block name="content">
+    <div class="admin-content" id="app">
+
+        <div class="am-cf am-padding">
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">菜单与权限</strong> /
+                <small>Menus & Rules</small>
+            </div>
+        </div>
+
+        <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-6">
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                        <button type="button" onclick="compress()" class="am-btn am-btn-secondary">
+                            <span class="am-icon-compress"></span> 折叠
+                        </button>
+                        <button type="button" onclick="expand()" class="am-btn am-btn-success">
+                            <span class="am-icon-expand"></span> 展开
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="am-g">
+            <div class="am-u-lg-6">
+
+                <div class="dd" id="nestable">
+                    <ol class="dd-list">
+
+                        <volist name="menus" id="menu">
+                            <li class="dd-item dd3-item" data-id="{{$menu.id}}">
+                                <div class="dd-handle dd3-handle">Drag</div>
+                                <div class="dd3-content">
+                                    <span class="{{$menu.icon}}"></span> {{$menu.title}} ({{$menu.name}})
+                                    <div class="pull-right action-buttons">
+                                        <a href="javascript:;" id="add_parent" data-parent-title="{{$menu.title}}"
+                                           data-am-popover="{theme: 'secondary sm', content: '新增', trigger: 'hover'}"><i
+                                                class="am-icon-plus add_menu"></i></a>
+                                        <a href="javascript:;"
+                                           data-am-popover="{theme: 'success sm', content: '编辑', trigger: 'hover'}"><i
+                                                class="am-icon-pencil"></i></a>
+                                        <a href="javascript:;"
+                                           data-am-popover="{theme: 'danger sm', content: '删除', trigger: 'hover'}"><i
+                                                class="am-icon-trash del_menu"></i></a>
+                                    </div>
+                                </div>
+
+                                <ol class="dd-list dd-hide" data-start-collapsed="true">
+
+                                    <notempty name="menu.children">
+                                        <volist name="menu.children" id="child">
+                                            <li class="dd-item dd3-item" data-id="{{$child.id}}">
+                                                <div class="dd-handle dd3-handle">Drag</div>
+                                                <div class="dd3-content">
+                                                    <span class="{{$child.icon}}"></span> {{$child.title}}
+                                                    ({{$child.name}})
+                                                    <div class="pull-right action-buttons">
+                                                        <a href="javascript:;"
+                                                           data-am-popover="{theme: 'secondary sm', content: '新增', trigger: 'hover'}"><i
+                                                                class="am-icon-plus"></i></a>
+                                                        <a href="javascript:;" class="editMenu"
+                                                           data-am-popover="{theme: 'success sm', content: '编辑', trigger: 'hover'}"><i
+                                                                class="am-icon-pencil"></i></a>
+                                                        <a href="javascript:;"
+                                                           data-am-popover="{theme: 'danger sm', content: '删除', trigger: 'hover'}"><i
+                                                                class="am-icon-trash del_menu"></i></a>
+                                                    </div>
+                                                </div>
+
+                                                <ol class="dd-list dd-hide" data-start-collapsed="true">
+                                                    <notempty name="child.child">
+                                                        <volist name="child.child" id="c">
+                                                            <li class="dd-item dd3-item" data-id="{{$c.id}}">
+                                                                <div class="dd-handle dd3-handle">Drag</div>
+                                                                <div class="dd3-content">
+                                                                    {{$c.title}} ({{$c.name}})
+                                                                    <div class="pull-right action-buttons">
+                                                                        <a href="javascript:;"
+                                                                           data-am-popover="{theme: 'success sm', content: '编辑', trigger: 'hover'}"><i
+                                                                                class="am-icon-pencil"></i></a>
+                                                                        <a href="javascript:;"
+                                                                           data-am-popover="{theme: 'danger sm', content: '删除', trigger: 'hover'}"><i
+                                                                                class="am-icon-trash del_menu"></i></a>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </volist>
+                                                    </notempty>
+                                                </ol>
+                                            </li>
+                                        </volist>
+                                    </notempty>
+                                </ol>
+                            </li>
+                        </volist>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="am-u-lg-6">
+                <div class="am-panel am-panel-default">
+                    <div class="am-panel-bd ">
+                        <form class="am-form" data-am-validator>
+                            <div id="_method"></div>
+                            <div class="am-g am-margin-top">
+                                <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                                    上级菜单
+                                </div>
+                                <div class="am-u-sm-8 am-u-md-9 am-u-end col-end">
+                                    <select name="parent_id" id="parent_id">
+                                        <option value="0">顶级菜单</option>
+                                        <volist name="menus" id="menu">
+                                            <option value="{{$menu.id}}">
+                                                {{$menu.title}}
+                                                <volist name="menu.children" id="child">
+                                            <option value="{{$child.id}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--{{$child.title}}</option>
+                                        </volist>
+                                        </option>
+                                        </volist>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="am-g am-margin-top">
+                                <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                                    图标
+                                </div>
+                                <div class="am-u-sm-8 am-u-md-9">
+                                    <div class="am-form-group am-form-icon">
+                                        <i class="permission.icon"></i>
+                                        <input type="text" class="am-form-field am-input-sm" id="icon"
+                                               placeholder="请输入图标的class">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="am-g am-margin-top">
+                                <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                                    菜单名称
+                                </div>
+                                <div class="am-u-sm-8 am-u-md-9">
+                                    <input type="text" class="am-input-sm" id="title" placeholder="请输入菜单名称" required>
+                                </div>
+                            </div>
+
+                            <div class="am-g am-margin-top">
+                                <div class="am-u-sm-4 am-u-md-3 am-text-right">
+                                    权限名称
+                                </div>
+                                <div class="am-u-sm-8 am-u-md-9">
+                                    <textarea rows="4" id="name" placeholder="请输入权限名称" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="am-margin">
+                                <button type="submit" class="am-btn am-btn-primary am-radius submit">保 存</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <!--此插件自带表单验证功能-->
+    <script src="__PUBLIC__/vendor/nestable/jquery.nestable.js"></script>
+    <script>
+        $(function () {
+            $('.dd').nestable({
+                maxDepth: 3,
+            });
+
+            //展开
+            function expand() {
+                $('.dd').nestable('expandAll');
+            }
+
+            //折叠
+            function compress() {
+                $('.dd').nestable('collapseAll');
+            }
+
+            //新增菜单
+            $('.submit').click(function () {
+                var info = {
+                    parent_id: $('#parent_id option:selected').val(),
+                    icon: $("#icon").val(),
+                    title: $("#title").val(),
+                    name: $("#name").val()
+                };
+
+                $.post("http://qinsongc.net/shop.php{{:U('AuthSet/add_rule')}}", info, function (data) {
+                    if (data.status == 1) {
+                        alert(data.msg);
+                        window.location.reload();
+                    } else {
+                        alert(data.msg); //如果无法新增就提示没有权限信息，然后跳转
+                        location.href="http://qinsongc.net/shop.php{{:U('User/no_auth')}}";
+                    }
+                })
+
+                return false;
+            })
+
+            $(".edit_menu").click(function(){
+                var id = $(this).parents('li').data('id');
+
+                return false;
+            })
+
+
+            //删除菜单
+            $('.del_menu').click(function () {
+                var id = $(this).parents('li').data('id');
+
+                $.post("http://qinsongc.net/shop.php{{:U('delete_menu')}}", {id: id}, function (data) {
+                    if (data.status == 1) {
+                        alert(data.msg);
+                        $("li[data-id='" + id + "']").fadeOut(400);
+                    } else {
+                        alert(data.msg);
+                        return false;
+                    }
+                })
+                return false;
+            })
+
+
+        })
+    </script>
+</block>

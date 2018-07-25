@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>长乐美食城后台注册</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="alternate icon" type="image/png" href="__PUBLIC__/vendor/assets/i/favicon.png">
+    <link rel="stylesheet" href="__PUBLIC__/vendor/assets/css/amazeui.min.css"/>
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+        .am-icon-heart {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="am-g">
+        <h1>长乐美食城</h1>
+        <p>Integrated Development Environment<br/>代码编辑，代码生成，界面设计，调试，编译</p>
+    </div>
+    <hr/>
+</div>
+<div class="am-g">
+    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+        <h3>管理员注册</h3>
+        <hr>
+        <form class="am-form">
+            <label for="username">用户名:</label>
+            <input type="text" id="username" placeholder="用户名">
+            <br>
+            <label for="email">邮箱:</label>
+            <input type="text" id="email" placeholder="邮箱">
+            <br>
+            <label for="mobile">手机号:</label>
+            <input type="text" id="mobile" placeholder="手机号">
+            <br>
+            <label for="password">密码:</label>
+            <input type="password" id="password" placeholder="密码">
+            <br>
+            <label for="password">确认密码:</label>
+            <input type="password" id="check_password" placeholder="密码">
+            <br>
+            <div class="am-cf">
+                <input type="submit" value="注 册" class="am-btn am-btn-primary am-btn-sm am-fl submit">
+            </div>
+        </form>
+        <hr>
+        <p>Copyright © 2017. Made With <i class="am-icon am-icon-heart"></i> By Holy. All
+            Rights Reserved.
+        </p>
+    </div>
+</div>
+
+<script src="__PUBLIC__/vendor/assets/js/jquery.min.js"></script>
+<script src="__PUBLIC__/vendor/assets/js/amazeui.min.js"></script>
+<script>
+    $(function () {
+        $('.submit').click(function () {
+            var info = {
+                username: $("#username").val(),
+                email: $("#email").val(),
+                mobile: $("#mobile").val(),
+                password: $("#password").val(),
+                check_password: $("#check_password").val()
+            };
+
+
+            if (info.username == "" || info.username.length < 5) {
+                alert('用户名长度最低5位');
+                return false;
+            }
+
+            var re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+            if (!re.test(info.email)) {
+                alert('邮箱格式不正确');
+                return false;
+            }
+
+            if (!(/^1(3|4|5|7|8)\d{9}$/.test(info.mobile))) {
+                alert('手机号格式不正确');
+                return false;
+            }
+
+            if (info.password.length < 6) {
+                alert('密码最低6位');
+                return false;
+            }
+
+            if (info.check_password.length < 6) {
+                alert('确认密码最低6位');
+                return false;
+            }
+
+            if (info.password != info.check_password) {
+                alert('两次密码输入不一样');
+                return false;
+            }
+
+            $.post("http://qinsongc.net/shop.php{{:U('register')}}", info, function (data) {
+                if (data.status == 1) {
+                    alert(data.msg);
+                    location.href = "http://qinsongc.net/shop.php{{:U('User/login')}}";
+                } else {
+                    alert(data.msg);
+                }
+            });
+            return false;
+        })
+    })
+</script>
+</body>
+</html>

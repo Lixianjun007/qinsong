@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /Application/
+Disallow: /Public/
+Disallow: /ThinkPHP/
+Disallow: /Admin/
+Disallow: /admin.php
+Disallow: /core.php
+Disallow: /composer.json
+Disallow: /index.php?m=Home&c=User&*
+Disallow: /index.php?m=Home&c=Order&*
+Disallow: /Home/Order/*
+Disallow: /Home/User/*

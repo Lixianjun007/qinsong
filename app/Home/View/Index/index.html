@@ -1,0 +1,71 @@
+<extend name="./app/Home/View/Layout/application.html"/>
+
+<block name="content">
+    <div class="index">
+        <div class="slick meun">
+            <foreach name="adverts" item="ad">
+                <a href="{{$ad.url}}"><img class="img-responsive" src="{{$ad.thumb}}" alt="{{$ad.title}}"
+                                           style="width: 354px;height: 222px;"/></a>
+            </foreach>
+        </div>
+
+        <ul class="nav">
+            <li><a href="http://qinsongc.net/shop.php{{:U('all')}}">全部商品</a></li>
+            <li><a href="http://qinsongc.net/shop.php{{:U('category')}}">商品分类</a></li>
+        </ul>
+
+        <h3>新品上市</h3>
+
+        <div class="products">
+            <volist name="new_products" id="new">
+                <dl>
+                    <dt>
+                        <a href="http://qinsongc.net/shop.php{{:U('show',['id'=>$new['id']])}}">
+                            <img class="img-responsive" src="{{$new.thumb}}" alt="{{$new.name}}" style="width: 152px;height: 92px;"/>
+                        </a>
+                    </dt>
+                    <dd><a href="#">{{$new.name}}</a><span>已售 {{$new.sale_done}}</span></dd>
+                    <dd class="label">库存 {{$new.stock}}</dd>
+                    <dd>¥ {{$new.price}}元</dd>
+                </dl>
+            </volist>
+        </div>
+
+        <h3>热销商品</h3>
+
+        <div class="products">
+            <volist name="hot_products" id="hot">
+                <dl>
+                    <dt>
+                        <a href="http://qinsongc.net/shop.php{{:U('show',['id'=>$hot['id']])}}">
+                            <img class="img-responsive" src="{{$hot.thumb}}" alt="{{$hot.name}}" style="width: 152px;height: 92px;"/>
+                        </a>
+                    </dt>
+                    <dd><a href="http://qinsongc.net/shop.php{{:U('show',['id'=>$hot['id']])}}">{{$hot.name}}</a><span>已售 {{$hot.sale_done}}</span>
+                    </dd>
+                    <dd class="label">库存 {{$hot.stock}}</dd>
+                    <dd>¥ {{$hot.price}}元</dd>
+                </dl>
+            </volist>
+        </div>
+
+        <h3>精品推荐</h3>
+
+        <div class="products">
+            <volist name="recommend_products" id="recommend">
+                <dl>
+                    <dt>
+                        <a href="http://qinsongc.net/shop.php{{:U('show',['id'=>$recommend['id']])}}">
+                            <img class="img-responsive" src="{{$recommend.thumb}}" alt="{{$recommend.name}}" style="width: 152px;height: 92px;"/>
+                        </a>
+                    </dt>
+                    <dd><a href="http://qinsongc.net/shop.php{{:U('show',['id'=>$recommend['id']])}}">{{$recommend.name}}</a><span>已售 {{$recommend.sale_done}}</span>
+                    </dd>
+                    <dd class="label">库存 {{$recommend.stock}}</dd>
+                    <dd>¥ {{$recommend.price}}元</dd>
+                </dl>
+            </volist>
+        </div>
+    </div>
+</block>
+

@@ -1,0 +1,177 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+
+<block name="content">
+    <div class="admin-content">
+
+        <div class="am-cf am-padding">
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">商品分类管理</strong> /
+                <small>Good Categories Manage</small>
+            </div>
+        </div>
+
+        <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-6">
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                        <a type="button" class="am-btn am-btn-default" href="http://qinsongc.net/shop.php{{:U('add')}}">
+                            <span class="am-icon-plus"></span> 新增
+                        </a>
+                        <button type="button" class="am-btn am-btn-success" id="show_all"
+                                href="javascript:;">
+                            <span class="am-icon-arrows-alt"></span> 展开所有
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="am-g">
+            <div class="am-u-sm-12">
+                <form class="am-form">
+                    <table class="am-table  am-table-hover table-main">
+                        <thead>
+                        <tr>
+                            <th class="table-id">编号</th>
+                            <th class="table-name" style="width: 20%;">分类名</th>
+                            <th style="width: 20%;">分类商品</th>
+                            <th class="table-is-show am-hide-sm-only">是否显示</th>
+                            <th class="table-sort-order am-hide-sm-only" style="width:10%">排序</th>
+                            <th class="table-set">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <volist name="categories" id="category">
+                            <tr data-id="{{$category.id}}" id="row_{{$category.id}}" class="xParent">
+                                <td>{{$category.id}}</td>
+                                <td>{{$category.name}}</td>
+                                <td></td>
+                                <td class="am-hide-sm-only" data-attr="{{$category.is_show}}">
+                                    <eq name="category.is_show" value="1">
+                                        <span class="am-icon-check is_show"></span>
+                                        <else/>
+                                        <span class="am-icon-close is_show"></span>
+                                    </eq>
+                                </td>
+                                <td class="am-hide-sm-only">
+                                    <input type="text" name="sort_order" class="am-input-sm sort_order"
+                                           value="{{$category.sort_order}}">
+                                </td>
+                                <td>
+                                    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <a class="am-btn am-btn-default am-btn-xs am-text-secondary"
+                                               href="http://qinsongc.net/shop.php{{:U('edit', ['id'=>$category[id]])}}">
+                                                <span class="am-icon-pencil-square-o"></span> 编辑
+                                            </a>
+
+                                            <a class="delete_category am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"
+                                               href="javascript:;">
+                                                <span class="am-icon-trash-o"></span> 删除
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <volist name="category.children" id="child">
+                                <tr data-id="{{$child.id}}" id="child_row_{{$child.id}}" class="xChildren">
+                                    <td>{{$child.id}}</td>
+                                    <td>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|--{{$child.name}}
+                                    </td>
+                                    <td>
+                                        <a href="http://qinsongc.net/shop.php{{:U('Product/index', ['category_id' =>$child[id]])}}" class="am-btn am-btn-secondary am-btn-xs">查看商品</a>
+                                    </td>
+                                    <td class="am-hide-sm-only" data-attr="{{$child.is_show}}">
+                                        <eq name="child.is_show" value="1">
+                                            <span class="am-icon-check is_show"></span>
+                                            <else/>
+                                            <span class="am-icon-close is_show"></span>
+                                        </eq>
+                                    </td>
+                                    <td class="am-hide-sm-only">
+                                        <input type="text" name="sort_order" class="am-input-sm sort_order"
+                                               value="{{$child.sort_order}}">
+                                    </td>
+                                    <td>
+                                        <div class="am-btn-toolbar">
+                                            <div class="am-btn-group am-btn-group-xs">
+                                                <a class="am-btn am-btn-default am-btn-xs am-text-secondary"
+                                                   href="http://qinsongc.net/shop.php{{:U('edit', ['id'=>$child[id]])}}">
+                                                    <span class="am-icon-pencil-square-o"></span> 编辑
+                                                </a>
+
+                                                <a class="delete_category am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"
+                                                   href="javascript:;">
+                                                    <span class="am-icon-trash-o"></span> 删除
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </volist>
+                        </volist>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script>
+        $(function () {
+            //展开与折叠表格
+            $("#show_all").click(function () {
+                $("tr.xParent").toggleClass();
+                $("tr.xChildren").toggle('am-active');
+            });
+
+            //ajax删除
+            $('.delete_category').click(function () {
+                var id = $(this).parents('tr').data('id');
+                var _this = $(this);
+                $.post("http://qinsongc.net/shop.php{{:U('delete')}}", {id: id}, function (data) {
+                    if (data.status == 1) {
+                        alert(data.msg);
+                        _this.parents('tr').fadeOut(400);
+                    } else {
+                        alert(data.msg);
+                    }
+                })
+                return false;
+            });
+
+            //是否显示
+            $('.is_show').click(function () {
+                var id = $(this).parents('tr').data('id');
+                var is_show = $(this).parents('td').attr('data-attr');
+                var _this = $(this);
+                $.post("http://qinsongc.net/shop.php{{:U('change_attr')}}", {
+                    id: id,
+                    is_show: is_show
+                }, function () {
+                    _this.toggleClass('am-icon-check am-icon-close');
+                })
+                return false;
+            });
+
+            //ajax排序
+            $('.sort_order').change(function () {
+                var id = $(this).parents('tr').data('id');
+                var sort_order = $(this).val();
+
+                $.post("http://qinsongc.net/shop.php{{:U('sort_order')}}", {
+                    id: id,
+                    sort_order: sort_order
+                }, function () {
+                    window.location.reload();
+                });
+                return false;
+            })
+
+        })
+    </script>
+</block>

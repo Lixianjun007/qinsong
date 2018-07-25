@@ -1,0 +1,121 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+
+<block name="content">
+    <div class="admin-content">
+
+        <div class="am-cf am-padding">
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">新增广告</strong> /
+                <small>Create A New Ad</small>
+            </div>
+        </div>
+        <hr>
+
+        <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-12">
+                <form class="am-form" action="http://qinsongc.net/shop.php{{:U('add')}}" method="post">
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            广告标题
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-4">
+                            <input type="text" class="am-input-sm" required minlength="5" name="title">
+                        </div>
+                        <div class="am-hide-sm-only am-u-md-6">*必填，不可重复</div>
+                    </div>
+
+
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            广告图
+                        </div>
+
+                        <div class="am-u-sm-8 am-u-md-8 am-u-end col-end">
+                            <div class="am-form-group am-form-file">
+                                <button type="button" class="am-btn am-btn-success am-btn-sm new_thumb">
+                                    <i class="am-icon-cloud-upload" id="loading"></i> 上传缩略图
+                                </button>
+                                <div id="upload_one" style="display: none;"></div>
+                                <div id="view_one">
+                                    <input type="hidden" name="thumb" value="">
+                                    <img src="" class="img-responsive"
+                                         style="margin-top:5px;max-height:150px;max-width: 150px;">
+                                </div>
+                            </div>
+
+                            <hr data-am-widget="divider" style="" class="am-divider am-divider-dashed"/>
+
+                            <div>
+                                <img src="" id="img_show" style="max-height: 200px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-g am-margin-top sort">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            描述信息
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                            <textarea rows="4" name="description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            广告地址
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-4  am-u-end col-end">
+                            <input type="text" class="am-input-sm" name="url" required placeholder="请填写广告地址~">
+                        </div>
+                    </div>
+
+                    <div class="am-g am-margin-top sort">
+                        <div class="am-u-sm-4 am-u-md-2 am-text-right">
+                            排序
+                        </div>
+                        <div class="am-u-sm-8 am-u-md-4 am-u-end col-end">
+                            <input type="text" name="sort_order" class="am-input-sm" value="99">
+                        </div>
+                    </div>
+
+                    <div class="am-margin">
+                        <button type="submit" class="am-btn am-btn-primary am-radius">提交保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="js">
+    <script src="__PUBLIC__/vendor/bootstrapextend/js/bootstrap.extend.js"></script>
+    <script src="__PUBLIC__/vendor/validate/jquery.validate.js"></script>
+    <script src="__PUBLIC__/vendor/validate/localization/messages_zh.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $(".am-form").validate({
+                onfocusout: function (element) {
+                    $(element).valid();
+                }
+            });
+
+            //给上传图片按钮绑定事件
+            $('.new_thumb').click(function () {
+                $("#file_upload_1-button").click();
+            })
+
+            //上传单张
+            $('#upload_one').Huploadify({
+                uploader: 'http://qinsongc.net/shop.php{{:U("Admin/Uploadfile/upload")}}',
+                fileTypeExts: '*.gif;*.jpg;*.jpeg;*.png;*.bmp',
+                //fileSizeLimit:{:C('UPLOAD_IMAGE_SIZE')}*1024,
+                buttonText: '上 传 图 片',
+                onUploadComplete: function (file, data) {
+                    data = $.parseJSON(data);
+                    $('#view_one img').attr('src', data.real_path);
+                    $('#view_one input').attr('value', data.real_path);
+                }
+            });
+
+        })
+    </script>
+</block>

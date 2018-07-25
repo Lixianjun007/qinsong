@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <title>会员中心</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/assets/home/css/common.css"/>
+</head>
+<body class="confirm-page">
+<section class="confirm">
+    <h3>请完善您的个人信息</h3>
+
+    <dl class="address">
+        <dt class="fa fa-user">&nbsp;&nbsp; 姓名：{{$customer.nickname}}</dt>
+        <br/>
+        <dt class="fa fa-star-o">&nbsp;&nbsp; 生日：{{$customer.birthday}}</dt>
+        <br/>
+        <dt class="fa fa-mobile">&nbsp;&nbsp; 手机：{{$customer.mobile}}</dt>
+        <br/>
+        <dt class="fa fa-inbox">&nbsp;&nbsp; 邮箱：{{$customer.email}}</dt>
+    </dl>
+
+    <p id="createAddress"><b class="fa fa-edit"></b> 修改个人信息</p>
+
+    <div class="address-form" style="padding-bottom: 14px;">
+        <div class="control">
+            <label>姓名</label>
+            <input name="nickname" type="text" placeholder="请填写姓名" value="{{$customer.nickname}}"/>
+        </div>
+
+        <div class="control">
+            <label>生日</label>
+            <input name="birthday" type="text" placeholder="请填写生日" value="{{$customer.birthday}}"/>
+        </div>
+
+        <div class="control">
+            <label>手机</label>
+            <input name="mobile" type="text" placeholder="请填写手机号" value="{{$customer.mobile}}"/>
+        </div>
+
+        <div class="control">
+            <label>邮箱</label>
+            <input name="email" type="text" placeholder="电子邮箱（选填）" value="{{$customer.email}}"/>
+        </div>
+
+        <p class="operate">
+            <a id="save" class="primary save_userInfo" href="javascript:;">保存</a>
+        </p>
+    </div>
+</section>
+
+<script type="text/javascript" src="__PUBLIC__/assets/home/js/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //填写信息
+        $('#save').click(function () {
+            var $nickname = $('input[name="nickname"]');
+            var $birthday = $('input[name="birthday"]');
+            var $mobile = $('input[name="mobile"]');
+            var $email = $('input[name="email"]');
+            info = {
+                nickname: $.trim($nickname.val()),
+                birthday: $.trim($birthday.val()),
+                mobile: $.trim($mobile.val()),
+                email: $.trim($email.val())
+            };
+
+            if (info.nickname == "") {
+                $nickname.css('border-color', '#f00');
+                return false;
+            } else {
+                $nickname.css('border-color', '#ccc');
+            }
+            if (info.mobile == "") {
+                $tel.css('border-color', '#f00');
+                return false;
+            } else if (!/^1\d{10}$/.test(info.mobile)) {
+                $mobile.css('border-color', '#f00');
+                return false;
+            } else {
+                $mobile.css('border-color', '#ccc');
+            }
+            if (info.birthday == "") {
+                $birthday.css('border-color', '#f00');
+                return false;
+            } else {
+                $birthday.css('border-color', '#ccc');
+            }
+            if (info.email == "") {
+                $email.css('border-color', '#f00');
+                return false;
+            } else {
+                $email.css('border-color', '#ccc');
+            }
+
+            $.post("{:U('info')}", info, function (respone) {
+                if (respone.status == 1) {
+                    alert(respone.msg);
+                    window.location.reload();
+                }
+            });
+            return false;
+        })
+    });
+</script>
+</body>
+</html>

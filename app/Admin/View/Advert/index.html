@@ -1,0 +1,144 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+
+<block name="content">
+    <div class="admin-content">
+
+        <div class="am-cf am-padding">
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">广告列表</strong> /
+                <small>Ad List</small>
+            </div>
+        </div>
+
+        <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-6">
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                        <a type="button" class="am-btn am-btn-default" href="http://qinsongc.net/shop.php{{:U('add')}}">
+                            <span class="am-icon-plus"></span> 新增
+                        </a>
+
+                        <button type="button" class="am-btn am-btn-default" id="destroy_checked">
+                            <span class="am-icon-trash-o"></span> 删除
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="am-g">
+            <div class="am-u-sm-12">
+                <form class="am-form" id="form">
+                    <table class="am-table am-table-striped am-table-hover table-main">
+                        <thead>
+                        <tr>
+                            <th class="table-check"><input type="checkbox" id="checked_all"/></th>
+                            <th class="table-id">编号</th>
+                            <th>缩略图</th>
+                            <th>标题</th>
+                            <th class="table-category">广告地址</th>
+                            <th class="table-desc">描述信息</th>
+                            <th class="table-sort-order am-hide-sm-only">排序</th>
+                            <th class="table-set">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="adverts" id="ad">
+                            <tr data-id="{{$ad.id}}">
+                                <td><input type="checkbox" value="{{$ad.id}}" class="checked_id"
+                                           name="checked_id[]"/></td>
+                                <td>{{$ad.id}}</td>
+                                <td class="ad_thumb">
+                                    <img src="{{$ad.thumb}}" alt="" style="width: 80px;height: 60px;" class="thumb">
+                                </td>
+                                <td>{{$ad.title}}</td>
+                                <td>
+                                    <a href="{{$ad.url}}" target="_blank">{{$ad.url}}</a>
+                                </td>
+                                <td>{{$ad.description}}</td>
+                                <td class="am-hide-sm-only">
+                                    <input type="text" name="sort_order" class="am-input-sm sort_order"
+                                           value="{{$ad.sort_order}}" style="width: 40px;">
+                                </td>
+                                <td>
+                                    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <a class="am-btn am-btn-default am-btn-xs am-text-secondary"
+                                               href="http://qinsongc.net/shop.php{{:U('edit', ['id'=>$ad[id]])}}">
+                                                <span class="am-icon-pencil-square-o"></span> 编辑
+                                            </a>
+
+                                            <a class="del_one am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"
+                                               href="javascript:;"><span class="am-icon-trash-o"></span> 删除
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+
+                    共 {{$count['advert']}} 条记录
+
+                    <hr/>
+                </form>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script>
+        $(function () {
+            //ajax删除单条
+            $('.del_one').click(function () {
+                var id = $(this).parents('tr').data('id');
+                var _this = $(this);
+                $.post("http://qinsongc.net/shop.php{{:U('delete_one')}}", {id: id}, function () {
+                    _this.parents('tr').fadeOut(400);
+                })
+            });
+
+            //全选/反选
+            $("#checked_all").click(function () {
+                $(':checkbox').prop("checked", this.checked);
+            })
+
+            //ajax删除多条
+            $("#destroy_checked").click(function () {
+                var length = $(".checked_id:checked").length;
+                if (length == 0) {
+                    alert('您至少要选中一条记录~');
+                    return false;
+                }
+
+                if (confirm('确定要删除此广告么?')) {
+                    var checked_id = $(".checked_id:checked").serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "http://qinsongc.net/shop.php{{:U('delete_all')}}",
+                        data: checked_id,
+                        success: function () {
+                            window.location.reload();
+                        }
+                    });
+                }
+                return false;
+            });
+
+            //排序
+            $('.sort_order').change(function () {
+                var id = $(this).parents('tr').data('id');
+                var sort_order = $(this).val();
+                $.post("http://qinsongc.net/shop.php{{:U('sort_order')}}", {
+                    id: id,
+                    sort_order: sort_order
+                }, function () {
+                    window.location.reload();
+                });
+                return false;
+            })
+        })
+
+    </script>
+</block>

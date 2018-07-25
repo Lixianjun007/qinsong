@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0"/>
+    <title>琴松货运代理商城</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/assets/home/images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/mobiscroll-master/css/mobiscroll.scroller.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/mobiscroll-master/css/mobiscroll.frame.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/vendor/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/assets/home/css/common.css"/>
+</head>
+
+<body class="confirm-page">
+<section class="confirm">
+    <h3>收货地址</h3>
+
+    <dl class="address" id="chooseAddress" data-address="{{$address.id}}">
+        <dt>{{$address.name}} {{$address.tel}}</dt>
+        <dd>{{$address.address}}</dd>
+    </dl>
+
+    <p id="createAddress"><b class="fa fa-plus-circle"></b> 新增收货地址</p>
+
+    <div class="address-form" style="padding-bottom: 14px; display: none;">
+        <div class="control">
+            <label>姓名</label>
+            <input name="name" type="text" placeholder="请填写收货人姓名"/>
+        </div>
+
+        <div class="control">
+            <label>电话</label>
+            <input name="tel" type="text" placeholder="请填写收货人电话"/>
+        </div>
+
+        <div class="control">
+            <label>地区</label>
+            <input name="area" id="area" type="text" placeholder="请选择地区"/>
+        </div>
+
+        <div class="control">
+            <label>地址</label>
+            <input name="address" type="text" placeholder="请填写详细地址"/>
+        </div>
+
+        <p class="operate">
+            <a id="add_address" class="primary" href="javascript:;">新增</a>
+            <a class="cancel" href="javascript:;">取消</a>
+        </p>
+    </div>
+
+    <h3>购物清单</h3>
+
+    <volist name="products" id="product">
+        <dl class="good">
+            <dt><img class="img-responsive"
+                     src="{{$product.thumb}}" alt="产品图片"></dt>
+            <dd>{{$product.name}}</dd>
+            <dd><span>x {{$product.num}}</span>¥ {{$product.price}}元</dd>
+        </dl>
+    </volist>
+    <p id="total">总金额：<span>¥</span> <span>{{$total|number_format=###,2}}元</span></p>
+
+    <a href="javascript:;"><input class="submit check_out" type="submit" value="立即下单"/></a>
+</section>
+
+<include file="./app/Home/View/Layout/_footer.html"/>
+
+<script type="text/javascript" src="__PUBLIC__/assets/home/js/jquery.min.js"></script>
+
+<!--省市区插件开始-->
+<script type="text/javascript" src="__PUBLIC__/vendor/mobiscroll-master/js/mobiscroll.core.js"></script>
+<script type="text/javascript" src="__PUBLIC__/vendor/mobiscroll-master/js/mobiscroll.frame.js"></script>
+<script type="text/javascript" src="__PUBLIC__/vendor/mobiscroll-master/js/mobiscroll.scroller.js"></script>
+<script type="text/javascript" src="__PUBLIC__/vendor/mobiscroll-master/js/mobiscroll.select.js"></script>
+<script type="text/javascript" src="__PUBLIC__/vendor/mobiscroll-master/js/i18n/mobiscroll.i18n.zh.js"></script>
+<script type="text/javascript" src="__PUBLIC__/assets/home/js/areas.js"></script>
+<!--省市区插件结束-->
+
+<script type="text/javascript">
+    $(function () {
+        //显示新增地址
+        $('#createAddress').click(function () {
+            $(this).next().toggle();
+        });
+
+        //收起新增地址
+        $('.cancel').click(function () {
+            $(this).parents('.address-form').hide();
+            return false;
+        });
+
+        //省市区插件
+        $('#area').mobiscroll().scroller({
+            theme: 'mobiscroll',
+            lang: 'zh',
+            display: 'top',
+            fixedWidth: [100, 100, 100],
+            onBeforeShow: function (inst) {
+                var areaList = new Areas();
+                inst.settings.wheels = [[areaList.getData(1), areaList.getData(inst._tempWheelArray[0]), areaList.getData(inst._tempWheelArray[1])]];
+            },
+
+            parseValue: function (val) {
+                return [110000, 110100, 110101];
+            },
+
+            validate: function (html, index, time, dir, inst) {
+                var areaList = new Areas();
+
+                if (index == 0) {
+                    inst.settings.wheels[0][1] = areaList.getData(inst._tempWheelArray[0]);
+                    inst.changeWheel([1]);
+
+                    inst.settings.wheels[0][2] = areaList.getData(inst._tempWheelArray[1]);
+                    inst.changeWheel([2]);
+                }
+
+                if (index == 1) {
+                    inst.settings.wheels[0][2] = areaList.getData(inst._tempWheelArray[1]);
+                    inst.changeWheel([2]);
+                }
+            },
+
+            formatValue: function (data) {
+                var areaList = new Areas();
+                return areaList.getNameById(data[0]) + ' ' + areaList.getNameById(data[1]) + ' ' + areaList.getNameById(data[2]);
+            }
+        });
+
+        //新增地址
+        $("#add_address").click(function () {
+            var info = {
+                name: $('input[name="name"]').val(),
+                tel: $('input[name="tel"]').val(),
+                area: $('input[name="area"]').val(),
+                address: $('input[name="address"]').val()
+            };
+            if (info.name == "") {
+                $('input[name="name"]').css('border-color', '#f00');
+            } else {
+                $('input[name="name"]').css('border-color', '#ccc');
+            }
+            if (info.tel == "") {
+                $('input[name="tel"]').css('border-color', '#f00');
+                return false;
+            } else if (!/^1\d{10}$/.test(info.tel)) {
+                $('input[name="tel"]').css('border-color', '#f00');
+                return false;
+            } else {
+                $('input[name="tel"]').css('border-color', '#ccc');
+            }
+            if (info.area == "") {
+                $('input[name="area"]').css('border-color', '#f00');
+                return false;
+            } else {
+                $('input[name="area"]').css('border-color', '#ccc');
+            }
+            if (info.address == "") {
+                $('input[name="address"]').css('border-color', '#f00');
+                return false;
+            } else {
+                $('input[name="address"]').css('border-color', '#ccc');
+            }
+
+            $.post("http://qinsongc.net/shop.php{{:U('add_address')}}", info, function () {
+                $('input[name="name"]').val('');
+                $('input[name="tel"]').val('');
+                $('input[name="area"]').val('');
+                $('input[name="address"]').val('');
+                $('.address-form').hide();
+                window.location.reload();
+            })
+            return false;
+        });
+
+        //立即下单：
+        $('.check_out').click(function () {
+            var address_id = $("#chooseAddress").attr('data-address');
+            if (address_id == "") {
+                alert('请填写收货地址');
+                return false;
+            }
+            $.ajax({
+                type: 'POST',
+                url: "http://qinsongc.net/shop.php{{:U('store')}}",
+                data: {address_id: address_id},
+                success: function (data) {
+//                    console.log(data);return;
+                    if (data.status != 1) {
+                        alert(data.info);
+                        return false;
+                    } else {
+                        alert(data.msg);
+                        location.href = "confirm/id/" + data.id + ".html"; //下单成功后跳到订单确认页付款，并带上订单的id
+                    }
+                }
+            });
+            return false;
+        })
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+<block name="css">
+    <style>
+        .am-icon-heart {
+            color: red;
+        }
+    </style>
+</block>
+<block name="content">
+    <div class="admin-content">
+        <div class="admin-content-body">
+            <div class="am-cf am-padding am-padding-bottom-0">
+                <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">会员列表</strong> /
+                    <small>Customer List</small>
+                </div>
+            </div>
+
+            <hr>
+            <div class="am-g">
+                <div class="am-u-sm-12 am-u-md-12">
+                    <form class="am-form-inline" role="form" method="get">
+                        <div class="am-form-group">
+                            <input type="text" name="nickname" class="am-form-field" value="{{$_GET['nickname']}}" placeholder="按昵称">
+                        </div>
+                        <div class="am-form-group">
+                            <input type="text" name="mobile" class="am-form-field" value="{{$_GET['mobile']}}" placeholder="按手机号">
+                        </div>
+                        <div class="am-form-group">
+                            <div class="am-form-group am-form-icon">
+                                <div class="am-input-group am-datepicker-date" data-am-datepicker="{format: 'yyyy-mm-dd', viewMode: 'years'}">
+                                    <input type="text" class="am-form-field" name="birthday" value="{{$_GET['birthday']}}" placeholder="请选择生日">
+                                    <span class="am-input-group-btn am-datepicker-add-on">
+                                        <button class="am-btn am-btn-default" type="button"><span class="am-icon-calendar"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="am-btn am-btn-default">查询</button>
+                        <a href="http://qinsongc.net/shop.php{{:U('index')}}" class="am-btn am-btn-default">重置</a>
+                    </form>
+                </div>
+            </div>
+
+            <div class="am-g">
+                <div class="am-u-sm-12">
+                    <table class="am-table am-table-striped am-table-hover table-main">
+                        <thead>
+                        <tr>
+                            <th class="table-id">ID</th>
+                            <th class="table-title">昵称</th>
+                            <th class="table-title">头像</th>
+                            <th class="table-type">性别</th>
+                            <th class="table-type">手机号</th>
+                            <th class="table-type">生日</th>
+                            <th class="table-type">邮箱</th>
+                            <th class="table-type">注册时间</th>
+                            <th class="table-set">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <volist name="customers" id="customer">
+                            <tr data-id="{{$customer.id}}">
+                                <td>{{$customer.id}}</td>
+                                <td>{{$customer.nickname}}</td>
+                                <td>
+                                    <img src="{{$customer.thumb}}" alt=""
+                                         style="width: 90px;height: 50px;">
+                                </td>
+                                <td class="am-hide-sm-only">
+                                    <eq name="customer.sex" value="1">
+                                        <span class="am-icon-male"></span>
+                                        <else/>
+                                        <span class="am-icon-female"></span>
+                                    </eq>
+                                </td>
+                                <td>{{$customer.mobile}}</td>
+                                <td>{{$customer.birthday|date="Y-m-d", ###}}</td>
+                                <td>{{$customer.email}}</td>
+                                <td>{{$customer.created_at|date="Y-m-d", ###}}</td>
+                                <td>
+                                    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <a href="http://qinsongc.net/shop.php{{:U('Order/index', ['customer_id' =>$customer[mobile]])}}"
+                                               class="am-btn am-btn-secondary am-btn-xs"><span
+                                                    class="am-icon-eye"></span> 查看订单
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </volist>
+
+                        </tbody>
+                    </table>
+                    <div class="am-cf">
+                        共 {{$count['customer']}} 条记录
+                        <div class="am-fr">
+                            <ul class="am-pagination">
+                                <li class="am-disabled"><a href="javascript:;">«</a></li>
+                                {{$pages}}
+                                <li><a href="javascript:;">»</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+        </div>
+
+        <footer class="admin-content-footer">
+            <hr>
+            <p> &nbsp;&nbsp;Copyright © 2017. Made With <i class="am-icon am-icon-heart"></i> By Holy. All
+                Rights Reserved.
+            </p>
+        </footer>
+    </div>
+</block>
+
+<block name="js">
+    <script>
+        $(function () {
+            //ajax删除单条
+            $('.delete').click(function () {
+                if (confirm('确定要移至回收站么？')) {
+                    var id = $(this).parents('tr').data('id');
+                    $.post("http://qinsongc.net/shop.php{{:U('delete_product')}}", {id: id}, function (data) {
+                        if (data.status == 1) {
+                            alert(data.msg);
+                            $("tr[data-id='" + id + "']").fadeOut(400);
+                        } else {
+                            alert(data.msg);
+                            return false;
+                        }
+                    })
+                    return false;
+                }
+            });
+
+            //全选/反选
+            $("#check_all").click(function () {
+                $(':checkbox').prop("checked", this.checked);
+            })
+
+            //删除多条
+            $('.del_all').click(function () {
+                var length = $(".checked_id:checked").length;
+                if (length == 0) {
+                    alert('您至少要选中一条记录~');
+                    return false;
+                }
+
+                if (confirm('确定要移至回收站么?')) {
+                    var checked_id = $(".checked_id:checked").serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "http://qinsongc.net/shop.php{{:U('delete_all')}}",
+                        data: checked_id,
+                        success: function (data) {
+                            if (data.status == 1) {
+                                alert(data.msg);
+                                window.location.reload();
+                            }
+                        }
+                    });
+                }
+                return false;
+            });
+
+            //排序
+            $(".sort_order").change(function () {
+                var info = {
+                    id: $(this).parents('tr').data('id'),
+                    sort_order: $(this).val()
+                }
+
+                $.post("http://qinsongc.net/shop.php{{:U('sort_order')}}", info, function () {
+                    window.location.reload();
+                })
+                return false;
+            })
+
+
+            //改变库存
+            $(".stock").change(function () {
+                var info = {
+                    id: $(this).parents('tr').data('id'),
+                    stock: $(this).val()
+                }
+
+                $.post("http://qinsongc.net/shop.php{{:U('stock')}}", info);
+                return false;
+            })
+
+            //改变属性
+            $('.change_attr').click(function () {
+                var info = {
+                    id: $(this).parents('tr').data('id'),
+                    attr: $(this).attr('data-attr')
+                }
+                var _this = $(this);
+                $.post("http://qinsongc.net/shop.php{{:U('change_attr')}}", info, function (data) {
+                    console.log(data);
+                    _this.toggleClass('am-icon-check am-icon-close');
+                })
+                return false;
+            })
+        })
+    </script>
+</block>

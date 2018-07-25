@@ -1,0 +1,118 @@
+<extend name="./app/Home/View/Layout/application.html"/>
+
+<block name="content">
+    <h3 class="cart_title">我的购物车</h3>
+
+    <form>
+        <section class="cart">
+            <volist name="carts" id="cart">
+                <dl class="good" data-cart="{{$cart.cart_id}}">
+                    <dt><img class="img-responsive"
+                             src="{{$cart.thumb}}"
+                             alt="产品图片">
+                    </dt>
+                    <dd class="dd">
+                        <ul>
+                            <li>{{$cart.name}}</li>
+                            <li><span>¥</span> <span
+                                    class="price">{{$cart.price}}元</span></li>
+                            <li>
+                                <div class="btn-group">
+                                    <span class="sub">－</span>
+                                    <input type="text" value="{{$cart.num}}" class="num">
+                                    <span class="add">＋</span>
+                                </div>
+                                <a class="btn-cart-omit del_product" href="javascript:void(0);">移除</a>
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </volist>
+            <p id="total">总金额：<span>¥</span> <span
+                    id="total-price">{{$total|number_format=###,2}}元</span></p>
+
+            <input class="submit" type="submit" value="我要购买"/>
+        </section>
+    </form>
+</block>
+
+<block name="js">
+    <script>
+        $(function () {
+            //移除商品
+            $('.del_product').click(function () {
+                if (confirm('确定要移除此商品么？')) {
+                    var cartId = $(this).parents('dl').attr('data-cart');
+                    var _this = $(this);
+                    $.post("http://qinsongc.net/shop.php{{:U('remove_cart')}}", {cartId: cartId}, function () {
+                        _this.parents('dl').remove();
+                        window.location.reload();
+                    });
+                    return false;
+                }
+            });
+
+            //增加数量
+            $('.add').click(function () {
+                var t = $(this).parent().find('input[class *= num]');
+                t.val(parseInt(t.val()) + 1);
+                var id = $(this).parents('dl').attr('data-cart');
+                $.post("http://qinsongc.net/shop.php{{:U('add_num')}}", {
+                    id: id
+                });
+
+                setTotal();
+            });
+
+            //减少数量
+            $('.sub').click(function () {
+                var t = $(this).parent().find('input[class *= num]');
+                t.val(parseInt(t.val()) - 1);
+                if (parseInt(t.val()) < 1) {
+                    t.val(1);
+                    return false;
+                }
+                var id = $(this).parents('dl').attr('data-cart');
+                $.post("http://qinsongc.net/shop.php{{:U('sub_num')}}", {
+                    id: id
+                });
+
+                setTotal();
+            });
+
+            //修改数量
+            $('.num').blur(function () {
+                var $input = $(this);
+                var id = $(this).parent().attr('data-cartId');
+                if (!/^\d+$/.test($input.val()) || $input.val() <= 0) {
+                    $input.val(1);
+                }
+                var t_change = $input.val();
+                var id = $(this).parents('dl').attr('data-cart');
+                $.post("http://qinsongc.net/shop.php{{:U('change_num')}}", {
+                    id: id,
+                    num: t_change
+                });
+
+                setTotal();
+            });
+
+
+            //计算总价
+            function setTotal() {
+                var total = 0;
+                $(".good").each(function () {
+                    total += parseInt($(this).find('input[class *= num]').val()) *
+                        parseFloat($(this).find('ul li span[class *= price]').text());
+                });
+
+                $('#total-price').text(total.toFixed(2));
+            }
+
+            $('.submit').click(function () {
+                location.href = "http://qinsongc.net/shop.php{{:U('Order/index')}}";
+                return false;
+            })
+        })
+    </script>
+</block>

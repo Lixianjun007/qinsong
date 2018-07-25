@@ -1,0 +1,105 @@
+<extend name="./app/Admin/View/Layout/application.html"/>
+
+<block name="content">
+    <div class="admin-content">
+        <div class="am-cf am-padding">
+            <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">用户组管理</strong> /
+                <small>Users Group Manage</small>
+            </div>
+        </div>
+
+        <div class="am-g">
+            <div class="am-u-sm-12 am-u-md-6">
+                <div class="am-btn-toolbar">
+                    <div class="am-btn-group am-btn-group-xs">
+                        <a class="am-btn am-btn-default" href="http://qinsongc.net/shop.php{{:U('AuthSet/add_group')}}">
+                            <span class="am-icon-plus"></span> 新增
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="am-u-sm-12 am-u-md-3">
+                <form method="get">
+                    <div class="am-input-group am-input-group-sm">
+                        <input type="text" class="am-form-field" name="keyword" value="">
+                        <span class="am-input-group-btn">
+                            <button class="am-btn am-btn-default" type="submit">搜索</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="am-g">
+            <div class="am-u-sm-12">
+                <form class="am-form">
+                    <table class="am-table am-table-striped am-table-hover table-main">
+                        <thead>
+                        <tr>
+                            <th class="table-id">编号</th>
+                            <th class="table-thumb">用户组名</th>
+                            <th>创建时间</th>
+                            <th class="table-set">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <volist name="groups" id="group">
+                            <tr data-id="{{$group.id}}">
+                                <td>{{$group.id}}</td>
+                                <td>{{$group.title}}</td>
+                                <td>{{$group.create_time|date="Y-m-d H:i:s", ###}}</td>
+                                <td>
+                                    <div class="am-btn-toolbar">
+                                        <div class="am-btn-group am-btn-group-xs">
+                                            <a class="am-btn am-btn-default am-btn-xs am-text-secondary"
+                                               href="http://qinsongc.net/shop.php{{:U('edit_group', array('id'=>$group[id]))}}">
+                                                <span class="am-icon-pencil-square-o"></span> 编辑
+                                            </a>
+
+                                            <neq name="group.id" value="1">
+                                                <a class="del_group am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only"
+                                                   href="javascript:;">
+                                                    <span class="am-icon-trash-o"></span> 删除
+                                                </a>
+                                            </neq>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+
+                    共 {{$infoCount}} 条记录
+
+                    <hr/>
+                </form>
+            </div>
+        </div>
+    </div>
+</block>
+
+<block name="js">
+    <script>
+        $(function () {
+            //ajax删除用户组
+            $('.del_group').click(function () {
+                var id = $(this).parents('tr').data('id');
+                var _this = $(this);
+                $.post("delete_group", {id: id}, function (data) {
+//                    console.log(data);return false;
+                    if (data.status == 1) {
+                        alert(data.msg);
+                        _this.parents('tr').fadeOut(400);
+                    } else {
+                        alert(data.msg); //如果无法新增就提示没有权限信息，然后跳转
+                        location.href = "http://qinsongc.net/shop.php{{:U('User/no_auth')}}";
+                    }
+                })
+                return false;
+            })
+        })
+    </script>
+</block>
