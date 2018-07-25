@@ -257,17 +257,23 @@ class OrderController extends CommonController {
             }
         }
         $history = M('Order')->field('order_number')->where(['status' => 2])->order('upd_time desc')->limit(20)->select();
-        $max = 0;
-        foreach($history as $k => $v){
+        $max     = 0;
+        foreach ($history as $k => $v) {
             list($pre, $num) = explode('-', $v['order_number']);
-            if($num > $max){
-                $max = $num;
+            if ($num > $max) {
+                $max        = $num;
                 $return_max = $v['order_number'];
             }
         }
         // 部门
-                $data['department_text'] = L('order_department_list')[$data['department']];
-        $this->assign('return_max',$return_max);
+        $data['department_text'] = L('order_department_list')[$data['department']];
+        list($pret, $numt)  =  explode('.',  $data['department_text']);
+        if (!(isset($data['order_number']) && $data['order_number'])) {
+            $data['order_number'] = '二'.$pret.'-';
+            
+        }
+
+        $this->assign('return_max', $return_max);
         $this->assign('data', $data);
 
         // 状态列表
