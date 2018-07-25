@@ -48,7 +48,8 @@
             <!--状态 结束-->
             <!-- 订单编号 开始 -->
             <div class="am-form-group">
-                <label>订单编号</label>
+                
+            <label>订单编号</label><p>最新操作的20条中，最大编号为：<div style="color: red;font-weight: bold"> {{$return_max}} </div>  </p>  
                 <div>
                     <label class="am-radio-inline m-r-10">
                         <input class="am-radius form-keyword" name="order_number" value="{{$data.order_number}}" type="text">
@@ -61,6 +62,7 @@
                 <div>
                     <foreach name="data.courier" item="v">
                         <div class="m-b-10 o-h courier-items">
+                            <p class="m-0 am-fl">{{$data.department_text}}  /  </p>
                             <p class="m-0 am-fl">{{$v.number}}</p>
                             <p class="m-0 am-fl m-l-15">
                                 <span class="fl">{{$v.goods}} /</span>

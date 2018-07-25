@@ -19,16 +19,17 @@ return array(
         'price'           => array('col' => 'H', 'name' => '价格'),
         'add_time'        => array('col' => 'I', 'name' => '添加时间'),
     ),
-    'lxj'                    => array(
+    'lxj'               => array(
         'number'          => array('col' => 'A', 'name' => '序号NO.'),
         'order_id'        => array('col' => 'B', 'name' => '订单号Order No'),
-        'description'     => array('col' => 'C', 'name' => '物品名称'),
-        'department_text' => array('col' => 'D', 'name' => '部门'),
-        'weight'          => array('col' => 'E', 'name' => '物品重量Weight'),
-        'user_name'       => array('col' => 'F', 'name' => '姓名Name'),
-        'mobile_phone'    => array('col' => 'G', 'name' => '手机Mobile'),
-        'status_text'     => array('col' => 'H', 'name' => '状态Status'),
-        'upd_time'        => array('col' => 'I', 'name' => '更新时间updateTime'),
+        'user_name'       => array('col' => 'C', 'name' => '姓名Name'),
+        'order_number'    => array('col' => 'D', 'name' => '订单编号'),
+        'department_text' => array('col' => 'E', 'name' => '部门'),
+        'description'     => array('col' => 'F', 'name' => '物品名称'),
+        'express'         => array('col' => 'G', 'name' => '快递单号'),
+        'mobile_phone'    => array('col' => 'H', 'name' => '手机Mobile'),
+        'status_text'     => array('col' => 'I', 'name' => '状态Status'),
+        'upd_time'        => array('col' => 'J', 'name' => '更新时间updateTime'),
     )
 );
 ?>

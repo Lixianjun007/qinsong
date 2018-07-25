@@ -256,6 +256,18 @@ class OrderController extends CommonController {
                 $data['courier'] = unserialize($data['courier']);
             }
         }
+        $history = M('Order')->field('order_number')->where(['status' => 2])->order('upd_time desc')->limit(20)->select();
+        $max = 0;
+        foreach($history as $k => $v){
+            list($pre, $num) = explode('-', $v['order_number']);
+            if($num > $max){
+                $max = $num;
+                $return_max = $v['order_number'];
+            }
+        }
+        // 部门
+                $data['department_text'] = L('order_department_list')[$data['department']];
+        $this->assign('return_max',$return_max);
         $this->assign('data', $data);
 
         // 状态列表
