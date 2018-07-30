@@ -256,7 +256,7 @@ class OrderController extends CommonController {
                 $data['courier'] = unserialize($data['courier']);
             }
         }
-        $history = M('Order')->field('order_number')->where(['status' => 2])->order('upd_time desc')->limit(20)->select();
+        $history = M('Order')->field('order_number')->where(['status' => 1])->order('upd_time desc')->limit(20)->select();
         $max     = 0;
         foreach ($history as $k => $v) {
             list($pre, $num) = explode('-', $v['order_number']);
