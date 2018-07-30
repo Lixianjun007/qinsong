@@ -269,7 +269,7 @@ class OrderController extends CommonController {
         $data['department_text'] = L('order_department_list')[$data['department']];
         list($pret, $numt)  =  explode('.',  $data['department_text']);
         if (!(isset($data['order_number']) && $data['order_number'])) {
-            $data['order_number'] = '二'.$pret.'-';
+            $data['order_number'] = '三'.$pret.'-';
             
         }
 
