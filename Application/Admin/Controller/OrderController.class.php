@@ -347,11 +347,12 @@ class OrderController extends CommonController {
             ];
             $kg        += $_POST['courier']['kg'][$k];
         }
-        $price = sprintf("%.2f", 8 + ($kg - 1) * 6);
+        list($kg1, $kg2) = explode('.', $kg);
+        $price = sprintf("%.2f", 5 + ($kg1 - 1) * 1);
 
         // 更新数据
         $data = [
-            'price'        => ($price < 8) ? 8 : $price,
+            'price'        => ($price < 5) ? 5 : $price,
 //            'price' => 0, //lxj
             'courier'      => serialize($courier),
             'status'       => I('status'),

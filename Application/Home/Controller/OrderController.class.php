@@ -91,12 +91,19 @@ class OrderController extends CommonController {
             foreach ($tmp as $v) {
                 $kg = $v['kg'];
             }
-            $price  = sprintf("%.2f", 8 + ($kg - 1) * 6);
+            list($kg1, $kg2) = explode('.', $kg);
+            $price  = sprintf("%.2f", 5 + ($kg1 - 1) * 5);
             //备注
             $remark = isset($_POST['remarks']) ? $_POST['remarks'] : '';
 
             $tmpInfo = M('order')->where(['courier' => serialize($tmp), 'status' => ['neq', [4,5], 'AND']  ])->find();
-
+            
+            $noPay = M('order')->where(['user_id' => $this->user['id'],'status' => 1 ])->find();
+            
+            if($noPay){
+                $this->ajaxReturn('您的订单中存在未支付订单，请支付后再下单');
+            }
+            
             if (empty($tmpInfo)) {
                 // 订单添加
                 $order[] = [
@@ -106,7 +113,7 @@ class OrderController extends CommonController {
                     'department'   => $params['department'],
                     'ship'         => $params['ship'],
                     'courier'      => serialize($tmp),
-                    'price'        => ($price < 8) ? 8 : $price,
+                    'price'        => ($price < 5) ? 5 : $price,
 //                'price' => 0, //lxj
                     'status'       => 0,
                     'add_time'     => time(),
