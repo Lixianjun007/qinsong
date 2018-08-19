@@ -9,7 +9,7 @@ namespace Admin\Controller;
  * @version  0.0.1
  * @datetime 2016-12-01T21:51:08+0800
  */
-class OrderController extends CommonController {
+class WaterOrderController extends CommonController {
 
     /**
      * [_initialize 前置操作-继承公共前置方法]
@@ -41,7 +41,7 @@ class OrderController extends CommonController {
         $param = array_merge($_POST, $_GET);
 
         // 模型对象
-        $m = M('Order');
+        $m = M('water_order');
 
         // 条件
         $where = $this->GetIndexWhere();
@@ -52,7 +52,7 @@ class OrderController extends CommonController {
             'number' => $number,
             'total' => $m->where($where)->where('status <> 5')->count(),
             'where' => $param,
-            'url' => U('Admin/Order/Index'),
+            'url' => U('Admin/WaterOrder/Index'),
         );
         $page = new \My\Page($page_param);
 
@@ -64,7 +64,6 @@ class OrderController extends CommonController {
         }
         // 获取列表
         $list = $this->SetDataHandle($select);
-
         // 状态
         $this->assign('order_status_list', L('order_status_list'));
 
@@ -75,7 +74,7 @@ class OrderController extends CommonController {
         $this->assign('param', $param);
 
         // Excel地址
-        $this->assign('excel_url', U('Admin/Order/ExcelExport', $param));
+        $this->assign('excel_url', U('Admin/WaterOrder/ExcelExport', $param));
 
         // 分页
         $this->assign('page_html', $page->GetPageHtml());
@@ -97,7 +96,7 @@ class OrderController extends CommonController {
         $where = $this->GetIndexWhere();
 
         // 读取数据
-        $data = $this->SetDataHandle(M('Order')->where($where)->where('status <> 5')->select());
+        $data = $this->SetDataHandle(M('water_order')->where($where)->where('status <> 5')->select());
         $result = array();
         if (!empty($data)) {
             $number = count($data);
@@ -251,13 +250,13 @@ class OrderController extends CommonController {
         if (empty($_REQUEST['id'])) {
             $data = array();
         } else {
-            $data = M('Order')->find(I('id'));
+            $data = M('water_order')->find(I('id'));
             if (!empty($data['courier'])) {
                 // 静态资源地址处理
                 $data['courier'] = unserialize($data['courier']);
             }
         }
-        $history = M('Order')->field('order_number')->where(['status' => 1])->order('upd_time desc')->limit(20)->select();
+        $history = M('water_order')->field('order_number')->where(['status' => 1])->order('upd_time desc')->limit(20)->select();
         $max = 0;
         foreach ($history as $k => $v) {
             list($pre, $num) = explode('-', $v['order_number']);
@@ -291,6 +290,7 @@ class OrderController extends CommonController {
      * @datetime 2016-12-14T21:37:02+0800
      */
     public function Save() {
+        var_dump($_POST);exit;
         // 是否ajax请求
         if (!IS_AJAX) {
             $this->error(L('common_unauthorized_access'), -1000);
@@ -339,6 +339,7 @@ class OrderController extends CommonController {
         // 数据处理
         $courier = [];
         $kg = 0;
+        var_dump($_POST);exit;
         foreach ($_POST['courier']['number'] as $k => $v) {
             $courier[] = [
                 'number' => $v,
@@ -359,7 +360,7 @@ class OrderController extends CommonController {
             'order_number' => I('order_number'),
             'upd_time' => time(),
         ];
-        if (M('Order')->where(['id' => I('id')])->save($data)) {
+        if (M('water_order')->where(['id' => I('id')])->save($data)) {
             // 成功是否发起通知
 //            if (I('is_notice') == 1) {
 //                $this->OrderNotice(I('id'));
@@ -398,7 +399,7 @@ class OrderController extends CommonController {
         if (!empty($_POST['id'])) {
             // 更新
             $data = ['status' => 5, 'upd_time' => time()];
-            if (M('Order')->where(['id' => I('id')])->save($data)) {
+            if (M('water_order')->where(['id' => I('id')])->save($data)) {
                 $this->ajaxReturn(L('common_operation_success'), 0);
             } else {
                 $this->ajaxReturn(L('common_operation_error'), -100);
@@ -425,7 +426,7 @@ class OrderController extends CommonController {
         if (!empty($_POST['id'])) {
             // 更新
             $data = ['status' => 3, 'upd_time' => time()];
-            if (M('Order')->where(['id' => I('id')])->save($data)) {
+            if (M('water_order')->where(['id' => I('id')])->save($data)) {
                 $this->ajaxReturn(L('common_operation_success'), 0);
             } else {
                 $this->ajaxReturn(L('common_operation_error'), -100);

@@ -11,7 +11,7 @@ return array(
 	// 添加/编辑
 	'order_add_name'				=>	'订单添加',
 	'order_edit_name'				=>	'订单编辑',
-	'order_so_keyword_tips'			=>	'单号/姓名/手机',
+	'order_so_keyword_tips'			=>	'单号/姓名/手机/订单号',
 	'order_view_status_title'		=>	'订单状态',
 	'order_view_department_title'	=>	'部门',
 	'order_status_list'				=>	array(
@@ -21,8 +21,9 @@ return array(
 			3 => array('id' => 3, 'name' => '已完成'),
 			4 => array('id' => 4, 'name' => '已取消'),
 			5 => array('id' => 5, 'name' => '已关闭'),
+                        6 => array('id' => 6, 'name' => '配送中'),
 		),
-	'order_department_list'			=> ['Deck', 'Food and beverage', 'Photography', 'Engine', 'Finance', 'Human Resources', 'Medical', 'Cruise program', 'Casino', 'Surveillance', 'Production / theater ', 'Guest entertainment', 'Hotel', 'Musician', 'Concession', 'Gallery', 'IT', 'Restaurant', 'Bar', 'House miscellaneous', 'Shore excursions'],
+	'order_department_list'			=> ['A.Deck', 'B.Food and beverage', 'C.Photography', 'D.Engine', 'E.Finance', 'F.Human Resources', 'G.Medical', 'H.Cruise program', 'I.Casino', 'J.Surveillance', 'K.Production / theater ', 'L.Guest entertainment', 'M.Hotel', 'N.Musician', 'O.Concession', 'P.Galley', 'Q.IT', 'R.Restaurant', 'S.Bar', 'T.House miscellaneous', 'U.Shore excursions','V.Housekeeping','W.Guest Services','X.Spa','Y.Gift Shop','Z.Art','AA.Internet'],
 	'order_ship_list'				=> ['NCL'],
 
 	'order_is_disposal_list'				=>	array(

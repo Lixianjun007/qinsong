@@ -4,7 +4,7 @@
 <div class="content-right">
     <div class="content">
         <!-- form start -->
-        <form class="am-form view-list" action="{{:U('Admin/Order/Index')}}" method="POST">
+        <form class="am-form view-list" action="{{:U('Admin/WaterOrder/Index')}}" method="POST">
             <div class="am-g">
                 <select name="chose_key">
                     <option value="0" <if condition="isset($param['chose_key']) and $param['chose_key'] eq 0">selected</if>     >所有</option>
@@ -84,8 +84,8 @@
                         <td>
                     <foreach name="v.courier" item="vs">
                         <div class="m-b-10">
-                            <p class="m-0">{{$vs.number}}</p>
-                            <p class="m-0">{{$vs.goods}}/{{$vs.kg}}kg</p>
+                            <p class="m-0">{{$vs.brand}}</p>
+                            <p class="m-0">{{$vs.display_name}}/{{$vs.quat}}/{{$vs.quat_num}}</p>
                         </div>
                     </foreach>
                     </td>
@@ -96,15 +96,15 @@
                     <td class="am-hide-sm-only">{{$v.add_time}}</td>
                     <td class="view-operation">
 
-                        <a href="{{:U('Admin/Order/SaveInfo', array('id'=>$v['id']))}}" target="_blank">
+                        <a href="{{:U('Admin/WaterOrder/SaveInfo', array('id'=>$v['id']))}}" target="_blank">
                             <button class="am-btn am-btn-default am-btn-xs am-radius">{{:L('common_operation_edit')}}</button>
                         </a>
 
                     <if condition="$v.status lt 2">
-                        <button class="am-btn am-btn-default am-btn-xs am-radius submit-close" data-url="{{:U('Admin/Order/Close')}}" data-id="{{$v.id}}">{{:L('common_operation_close')}}</button>
+                        <button class="am-btn am-btn-default am-btn-xs am-radius submit-close" data-url="{{:U('Admin/WaterOrder/Close')}}" data-id="{{$v.id}}">{{:L('common_operation_close')}}</button>
                     </if>
                     <if condition="$v.status eq 2">
-                        <button class="am-btn am-btn-default am-btn-xs am-radius submit-success" data-url="{{:U('Admin/Order/Success')}}" data-id="{{$v.id}}">{{:L('common_success_name')}}</button>
+                        <button class="am-btn am-btn-default am-btn-xs am-radius submit-success" data-url="{{:U('Admin/WaterOrder/Success')}}" data-id="{{$v.id}}">{{:L('common_success_name')}}</button>
                         </a>
                     </if>
                     </td>
