@@ -102,7 +102,7 @@ class OrderController extends CommonController {
             //备注
             $remark = isset($_POST['remarks']) ? $_POST['remarks'] : '';
 
-            $tmpInfo = M('order')->where(['courier' => serialize($tmp), 'status' => ['neq', [4, 5], 'OR']])->find();
+            $tmpInfo = M('order')->where(['courier' => serialize($tmp), 'status' => ['neq', [4, 5], 'AND']])->find();
 
             if (empty($tmpInfo)) {
                 // 订单添加
