@@ -83,6 +83,12 @@ class OrderController extends CommonController {
     public function Add() {
         // 参数校验
         $params = $this->order_add_params_checked();
+        
+        $noPay  = M('order')->where(['user_id' => $this->user['id'], 'status' => 1])->find();
+
+        if ($noPay) {
+            $this->ajaxReturn('您的订单中存在未支付订单，请支付后再下单');
+        }
 
         // 价格计算
         $kg = 0;
@@ -96,14 +102,8 @@ class OrderController extends CommonController {
             //备注
             $remark = isset($_POST['remarks']) ? $_POST['remarks'] : '';
 
-            $tmpInfo = M('order')->where(['courier' => serialize($tmp), 'status' => ['neq', [4,5], 'AND']  ])->find();
-            
-            $noPay = M('order')->where(['user_id' => $this->user['id'],'status' => 1 ])->find();
-            
-            if($noPay){
-                $this->ajaxReturn('您的订单中存在未支付订单，请支付后再下单');
-            }
-            
+            $tmpInfo = M('order')->where(['courier' => serialize($tmp), 'status' => ['neq', [4, 5], 'AND']])->find();
+
             if (empty($tmpInfo)) {
                 // 订单添加
                 $order[] = [

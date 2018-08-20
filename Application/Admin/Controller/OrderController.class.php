@@ -270,7 +270,7 @@ class OrderController extends CommonController {
         $data['department_text'] = L('order_department_list')[$data['department']];
         list($pret, $numt) = explode('.', $data['department_text']);
         if (!(isset($data['order_number']) && $data['order_number'])) {
-            $data['order_number'] = '七' . $pret . '-';
+            $data['order_number'] = '八' . $pret . '-';
         }
 
         $this->assign('return_max', $return_max);
