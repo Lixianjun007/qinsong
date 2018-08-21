@@ -7,7 +7,7 @@
         <form class="am-form form-validation view-save" action="{{:U('Admin/WaterOrder/Save')}}" method="POST" request-type="ajax-url" request-value="{{:U('Admin/WaterOrder/SaveInfo', array('id'=>$data['id']))}}">
             <legend>
                 <span class="fs-16">
-                    <if condition="empty($data['id'])">
+                    <if condition="empty($data['id'])"> 
                         {{:L('order_add_name')}}
                         <else />
                         {{:L('order_edit_name')}}
