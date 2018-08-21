@@ -27,6 +27,24 @@ class NumberController extends CommonController {
         $this->Is_Power();
     }
     
+     public function addOrderNumber() {
+         $order_id = 27;
+        $data = M('water_order')->field('department')->find($order_id);
+        $data['department_text'] = L('order_department_list')[$data['department']]; //获得部门
+        list($pret, $numt) = explode('.', $data['department_text']);
+        $per_num_tmp = M('tmp_num')->where('type = 1')->find();
+        $data['order_number'] = 'water-' . $per_num_tmp['number'];
+
+        $map['order_number'] = ['like', $data['order_number'] . '%'];
+        $tmp_num = M('water_order')->where($map)->count();
+        $tmp_num++;
+        $final_order_num = $data['order_number'] . $pret . '-' . $tmp_num;
+
+        M('water_order')->where(['id' => $order_id])->save(['order_number' => $final_order_num]);
+
+        return true;
+    }
+    
     
     public function Index(){
         $number = I('number', 0);
