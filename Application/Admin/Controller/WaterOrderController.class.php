@@ -106,9 +106,9 @@ class WaterOrderController extends CommonController {
                 // 单号信息
                 if (!empty($v['courier'])) {
                     foreach ($v['courier'] as $vs) {
-                        $v['courier_text'] = $vs['number'] . '/' . $vs['goods'] . '/' . $vs['kg'] . "\n";
-                        $v['express'] = $vs['number'];
-                        $v['description'] = $vs['goods'];
+                        $v['courier_text'] = $vs['brand'] . '/' . $vs['display_name'] . '/' . $vs['quat'] . '/' . $vs['quat_num']. '/' . $vs['number']. "\n";
+                        $v['express'] = $vs['brand'];
+                        $v['description'] = $vs['display_name'] . '/' . $vs['quat'] . '*' . $vs['quat_num']. '/' . $vs['number'].'箱';
                         $result[] = $v;
                     }
                 } else {
@@ -120,7 +120,7 @@ class WaterOrderController extends CommonController {
         }
 
         // Excel驱动导出数据
-        $excel = new \My\Excel(array('filename' => 'order', 'title' => L('lxj'), 'data' => array_reverse($result), 'msg' => L('common_not_data_tips')));
+        $excel = new \My\Excel(array('filename' => 'order', 'title' => L('lxj2'), 'data' => array_reverse($result), 'msg' => L('common_not_data_tips')));
         $excel->Export();
     }
 

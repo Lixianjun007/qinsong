@@ -1,5 +1,7 @@
 <?php
+
 namespace Home\Controller;
+use Think\Log;
 
 /**
  * 订单
@@ -33,25 +35,25 @@ class OrderController extends CommonController {
      * @datetime 2017-02-22T16:50:32+0800
      */
     public function Index() {
-        $m          = M('order');
-        $number     = 10;
-        $page       = intval(I('page', 1));
-        $where      = $this->GetIndexWhere();
-        $total      = $m->where($where)->count();
+        $m = M('order');
+        $number = 10;
+        $page = intval(I('page', 1));
+        $where = $this->GetIndexWhere();
+        $total = $m->where($where)->count();
         $page_total = ceil($total / $number);
-        $start      = intval(($page - 1) * $number);
-        $data       = $m->where($where)->limit($start, $number)->order('id desc')->select();
+        $start = intval(($page - 1) * $number);
+        $data = $m->where($where)->limit($start, $number)->order('id desc')->select();
         if (empty($data)) {
             $this->ajaxReturn('没有数据');
         } else {
             foreach ($data as &$v) {
                 $v['add_time_text'] = date('Y-m-d H:i', $v['add_time']);
-                $v['courier']       = unserialize($v['courier']);
+                $v['courier'] = unserialize($v['courier']);
             }
             $result = [
-                'total'      => $total,
+                'total' => $total,
                 'page_total' => $page_total,
-                'data'       => $data,
+                'data' => $data,
             ];
             $this->ajaxReturn('成功', 0, $result);
         }
@@ -66,7 +68,7 @@ class OrderController extends CommonController {
      */
     private function GetIndexWhere() {
         $keywords = I('keywords');
-        $where    = ['user_id' => $this->user['id']];
+        $where = ['user_id' => $this->user['id']];
         if (!empty($keywords)) {
             $where['courier'] = ['like', '%' . $keywords . '%'];
         }
@@ -83,8 +85,8 @@ class OrderController extends CommonController {
     public function Add() {
         // 参数校验
         $params = $this->order_add_params_checked();
-        
-        $noPay  = M('order')->where(['user_id' => $this->user['id'], 'status' => 1])->find();
+
+        $noPay = M('order')->where(['user_id' => $this->user['id'], 'status' => 1])->find();
 
         if ($noPay) {
             $this->ajaxReturn('您的订单中存在未支付订单，请支付后再下单');
@@ -98,27 +100,31 @@ class OrderController extends CommonController {
                 $kg = $v['kg'];
             }
             list($kg1, $kg2) = explode('.', $kg);
-            $price  = sprintf("%.2f", 5 + ($kg1 - 1) * 5);
+            $price = sprintf("%.2f", 5 + ($kg1 - 1) * 5);
             //备注
             $remark = isset($_POST['remarks']) ? $_POST['remarks'] : '';
 
-            $tmpInfo = M('order')->where(['courier' => serialize($tmp), 'status' => ['neq', [4, 5], 'AND']])->find();
+            $tmpInfo = M('order')->where([
+                        'user_name' => $params['name'],
+                        'courier' => serialize($tmp),
+//                        'status' => ['neq', [4, 5], 'AND']
+                    ])->where('status <> 4 and status <> 5')->find();
 
             if (empty($tmpInfo)) {
                 // 订单添加
                 $order[] = [
-                    'user_id'      => $this->user['id'],
-                    'user_name'    => $params['name'],
+                    'user_id' => $this->user['id'],
+                    'user_name' => $params['name'],
                     'mobile_phone' => $params['mobile_phone'],
-                    'department'   => $params['department'],
-                    'ship'         => $params['ship'],
-                    'courier'      => serialize($tmp),
-                    'price'        => ($price < 5) ? 5 : $price,
+                    'department' => $params['department'],
+                    'ship' => $params['ship'],
+                    'courier' => serialize($tmp),
+                    'price' => ($price < 5) ? 5 : $price,
 //                'price' => 0, //lxj
-                    'status'       => 0,
-                    'add_time'     => time(),
+                    'status' => 0,
+                    'add_time' => time(),
 //			'user_note'		=> I('user_note'),
-                    'user_note'    => $remark,
+                    'user_note' => $remark,
                 ];
             }
         }
@@ -146,31 +152,31 @@ class OrderController extends CommonController {
         $params = [
             [
                 'checked_type' => 'empty',
-                'key_name'     => 'name',
-                'error_msg'    => '姓名不能为空',
+                'key_name' => 'name',
+                'error_msg' => '姓名不能为空',
             ],
             [
                 'checked_type' => 'empty',
-                'key_name'     => 'mobile_phone',
-                'error_msg'    => '手机不能为空',
+                'key_name' => 'mobile_phone',
+                'error_msg' => '手机不能为空',
             ],
             [
                 'checked_type' => 'isset',
-                'key_name'     => 'department',
-                'error_msg'    => '请选择部门',
+                'key_name' => 'department',
+                'error_msg' => '请选择部门',
             ],
             [
                 'checked_type' => 'isset',
-                'key_name'     => 'ship',
-                'error_msg'    => '请选择船号',
+                'key_name' => 'ship',
+                'error_msg' => '请选择船号',
             ],
             [
                 'checked_type' => 'empty',
-                'key_name'     => 'courier',
-                'error_msg'    => '单号信息不能为空',
+                'key_name' => 'courier',
+                'error_msg' => '单号信息不能为空',
             ]
         ];
-        $ret    = params_checked($_POST, $params);
+        $ret = params_checked($_POST, $params);
         if ($ret !== true) {
             $this->ajaxReturn($ret);
         }
@@ -193,17 +199,17 @@ class OrderController extends CommonController {
         $params = [
             [
                 'checked_type' => 'empty',
-                'key_name'     => 'order_id',
-                'error_msg'    => '订单id不能为空 order id not empty',
+                'key_name' => 'order_id',
+                'error_msg' => '订单id不能为空 order id not empty',
             ]
         ];
-        $ret    = params_checked($_POST, $params);
+        $ret = params_checked($_POST, $params);
         if ($ret !== true) {
             $this->ajaxReturn($ret);
         }
 
         $order_id = I('order_id');
-        $m        = M('order');
+        $m = M('order');
 
         /* 订单 */
         $order = $m->find($order_id);
@@ -221,14 +227,14 @@ class OrderController extends CommonController {
 
         /* 支付 */
         $notify_url = __MY_URL__ . 'Notify/order.php';
-        $pay_data   = array(
-            'out_user'    => md5($this->user['id']),
-            'order_sn'    => $order_id,
-            'name'        => '【' . $order['user_name'] . '-' . $order['id'] . '】运费',
+        $pay_data = array(
+            'out_user' => md5($this->user['id']),
+            'order_sn' => $order_id,
+            'name' => '【' . $order['user_name'] . '-' . $order['id'] . '】运费',
             'total_price' => $order['price'],
-            'notify_url'  => $notify_url,
+            'notify_url' => $notify_url,
         );
-        $result     = (new \My\Alipay())->SoonPay($pay_data, C("alipay_key_secret"));
+        $result = (new \My\Alipay())->SoonPay($pay_data, C("alipay_key_secret"));
         if (empty($result)) {
             $this->ajaxReturn('支付接口异常 api error');
         }
@@ -247,17 +253,17 @@ class OrderController extends CommonController {
         $params = [
             [
                 'checked_type' => 'empty',
-                'key_name'     => 'order_id',
-                'error_msg'    => '订单id为空 order id not empty',
+                'key_name' => 'order_id',
+                'error_msg' => '订单id为空 order id not empty',
             ]
         ];
-        $ret    = params_checked($_POST, $params);
+        $ret = params_checked($_POST, $params);
         if ($ret !== true) {
             $this->ajaxReturn($ret);
         }
 
         $order_id = I('order_id');
-        $m        = M('order');
+        $m = M('order');
 
         /* 订单 */
         $order = $m->find($order_id);
@@ -286,17 +292,17 @@ class OrderController extends CommonController {
         $params = [
             [
                 'checked_type' => 'empty',
-                'key_name'     => 'order_id',
-                'error_msg'    => '订单id不能为空 order id not empty',
+                'key_name' => 'order_id',
+                'error_msg' => '订单id不能为空 order id not empty',
             ]
         ];
-        $ret    = params_checked($_POST, $params);
+        $ret = params_checked($_POST, $params);
         if ($ret !== true) {
             $this->ajaxReturn($ret);
         }
 
         $order_id = I('order_id');
-        $m        = M('order');
+        $m = M('order');
 
         /* 订单 */
         $order = $m->find($order_id);
@@ -314,4 +320,5 @@ class OrderController extends CommonController {
     }
 
 }
+
 ?>

@@ -30,6 +30,18 @@ return array(
         'mobile_phone'    => array('col' => 'H', 'name' => '手机Mobile'),
         'status_text'     => array('col' => 'I', 'name' => '状态Status'),
         'upd_time'        => array('col' => 'J', 'name' => '更新时间updateTime'),
+    ),
+    'lxj2'               => array(
+        'number'          => array('col' => 'A', 'name' => '序号NO.'),
+        'order_id'        => array('col' => 'B', 'name' => '订单号Order No'),
+        'user_name'       => array('col' => 'C', 'name' => '姓名Name'),
+        'order_number'    => array('col' => 'D', 'name' => '订单编号'),
+        'department_text' => array('col' => 'E', 'name' => '部门'),
+        'description'     => array('col' => 'F', 'name' => '规格描述'),
+        'express'         => array('col' => 'G', 'name' => '品牌'),
+        'mobile_phone'    => array('col' => 'H', 'name' => '手机Mobile'),
+        'status_text'     => array('col' => 'I', 'name' => '状态Status'),
+        'upd_time'        => array('col' => 'J', 'name' => '更新时间updateTime'),
     )
 );
 ?>

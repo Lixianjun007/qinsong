@@ -27,4 +27,17 @@ function PowerCacheDelete()
 		}
 	}
 }
+
+    function logToFile($errMsg, $logfile="/tmp/lxjerror.log")
+    {
+        $items = debug_backtrace();
+        $errfile = $items[0]["file"];
+        $errline = $items[0]["line"];
+        
+        $time = date("[Y-m-d H:i:s]");
+        
+        $str = $time."[".basename($errfile).":".$errline."] ".$errMsg."\r\n";
+ 
+        error_log($str, 3, $logfile);
+    }
 ?>

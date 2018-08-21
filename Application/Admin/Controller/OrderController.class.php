@@ -270,7 +270,9 @@ class OrderController extends CommonController {
         $data['department_text'] = L('order_department_list')[$data['department']];
         list($pret, $numt) = explode('.', $data['department_text']);
         if (!(isset($data['order_number']) && $data['order_number'])) {
-            $data['order_number'] = '八' . $pret . '-';
+            $per_num_tmp = M('tmp_num')->where('type = 1')->find();
+            
+            $data['order_number'] = $per_num_tmp['number'] . $pret . '-';
         }
 
         $this->assign('return_max', $return_max);

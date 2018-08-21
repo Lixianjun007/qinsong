@@ -62,7 +62,7 @@
                     <th>手机</th>
                     <th class="am-hide-sm-only">部门</th>
                     <th class="am-hide-sm-only">所属船舶</th>
-                    <th>快递信息</th>
+                    <th>详情</th>
                     <th>订单编号</th>
                     <th>状态</th>
                     <th>价格</th>
@@ -85,7 +85,8 @@
                     <foreach name="v.courier" item="vs">
                         <div class="m-b-10">
                             <p class="m-0">{{$vs.brand}}</p>
-                            <p class="m-0">{{$vs.display_name}}/{{$vs.quat}}/{{$vs.quat_num}}</p>
+                            <p class="m-0">{{$vs.display_name}}/{{$vs.quat}}*{{$vs.quat_num}}</p>
+                            <p class="m-0">【&nbsp;&nbsp;{{$vs.number}}箱&nbsp;&nbsp;】</p>
                         </div>
                     </foreach>
                     </td>
