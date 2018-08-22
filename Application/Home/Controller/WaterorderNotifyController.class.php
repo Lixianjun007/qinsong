@@ -55,7 +55,7 @@ class WaterorderNotifyController extends CommonController {
 
         /* 更新支付状态 */
         $where = ['id' => $order['id']];
-        if ($m->where($where)->save(['status' => 6, 'upd_time' => time()])) {
+        if ($m->where($where)->save(['status' => 2, 'upd_time' => time()])) {
             /* 写入账单支付日志 */
             $pay_log_data = [
                 'order_id' => $order['id'],
