@@ -120,7 +120,7 @@ class WaterOrderController extends CommonController {
         }
 
         // Excel驱动导出数据
-        $excel = new \My\Excel(array('filename' => 'order', 'title' => L('lxj2'), 'data' => array_reverse($result), 'msg' => L('common_not_data_tips')));
+        $excel = new \My\Excel(array('filename' => 'water-order', 'title' => L('lxj2'), 'data' => array_reverse($result), 'msg' => L('common_not_data_tips')));
         $excel->Export();
     }
 
@@ -256,23 +256,23 @@ class WaterOrderController extends CommonController {
                 $data['courier'] = unserialize($data['courier']);
             }
         }
-        $history = M('water_order')->field('order_number')->where(['status' => 1])->order('upd_time desc')->limit(20)->select();
-        $max = 0;
-        foreach ($history as $k => $v) {
-            list($pre, $num) = explode('-', $v['order_number']);
-            if ($num > $max) {
-                $max = $num;
-                $return_max = $v['order_number'];
-            }
-        }
+//        $history = M('water_order')->field('order_number')->where(['status' => 1])->order('upd_time desc')->limit(20)->select();
+//        $max = 0;
+//        foreach ($history as $k => $v) {
+//            list($pre, $num) = explode('-', $v['order_number']);
+//            if ($num > $max) {
+//                $max = $num;
+//                $return_max = $v['order_number'];
+//            }
+//        }
         // 部门
         $data['department_text'] = L('order_department_list')[$data['department']];
-        list($pret, $numt) = explode('.', $data['department_text']);
-        if (!(isset($data['order_number']) && $data['order_number'])) {
-            $data['order_number'] = '七' . $pret . '-';
-        }
+//        list($pret, $numt) = explode('.', $data['department_text']);
+//        if (!(isset($data['order_number']) && $data['order_number'])) {
+//            $data['order_number'] = '七' . $pret . '-';
+//        }
 
-        $this->assign('return_max', $return_max);
+//        $this->assign('return_max', $return_max);
         $this->assign('data', $data);
 
         // 状态列表
@@ -290,7 +290,6 @@ class WaterOrderController extends CommonController {
      * @datetime 2016-12-14T21:37:02+0800
      */
     public function Save() {
-        var_dump($_POST);exit;
         // 是否ajax请求
         if (!IS_AJAX) {
             $this->error(L('common_unauthorized_access'), -1000);
@@ -338,18 +337,20 @@ class WaterOrderController extends CommonController {
     private function Edit() {
         // 数据处理
         $courier = [];
-        $kg = 0;
-        var_dump($_POST);exit;
+        $price = 0;
         foreach ($_POST['courier']['number'] as $k => $v) {
             $courier[] = [
-                'number' => $v,
-                'goods' => $_POST['courier']['goods'][$k],
-                'kg' => $_POST['courier']['kg'][$k],
+                'brand' => $_POST['courier']['brand'][$k],
+                'display_name' => $_POST['courier']['display_name'][$k],
+                'quat' => $_POST['courier']['quat'][$k],
+                'quat_num' =>$_POST['courier']['quat_num'][$k],
+                'price' => $_POST['courier']['price'][$k],
+                'number' => $v, 
             ];
-            $kg += $_POST['courier']['kg'][$k];
+            $price += $v * $_POST['courier']['price'][$k];
         }
-        list($kg1, $kg2) = explode('.', $kg);
-        $price = sprintf("%.2f", 5 + ($kg1 - 1) * 1);
+//        list($kg1, $kg2) = explode('.', $kg);
+        $price = sprintf("%.2f", $price);
 
         // 更新数据
         $data = [
@@ -361,10 +362,7 @@ class WaterOrderController extends CommonController {
             'upd_time' => time(),
         ];
         if (M('water_order')->where(['id' => I('id')])->save($data)) {
-            // 成功是否发起通知
-//            if (I('is_notice') == 1) {
-//                $this->OrderNotice(I('id'));
-//            }
+
             $this->ajaxReturn(L('common_operation_edit_success'), 0);
         }
         $this->ajaxReturn(L('common_operation_edit_error'), -100);
@@ -448,7 +446,7 @@ class WaterOrderController extends CommonController {
         $status = I('status');
         if ($ids_arr && $status) {
             $data = ['status' => $status, 'upd_time' => time()];
-            M('order')->where(['id' => ['in', $ids_arr]])->save($data);
+            M('water_order')->where(['id' => ['in', $ids_arr]])->save($data);
             $this->ajaxReturn('批量更新成功', 0);
         }
 
