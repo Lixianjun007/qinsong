@@ -37,11 +37,12 @@ return array(
         'user_name'       => array('col' => 'C', 'name' => '姓名Name'),
         'order_number'    => array('col' => 'D', 'name' => '订单编号'),
         'department_text' => array('col' => 'E', 'name' => '部门'),
-        'description'     => array('col' => 'F', 'name' => '规格描述'),
-        'express'         => array('col' => 'G', 'name' => '品牌'),
-        'mobile_phone'    => array('col' => 'H', 'name' => '手机Mobile'),
-        'status_text'     => array('col' => 'I', 'name' => '状态Status'),
-        'upd_time'        => array('col' => 'J', 'name' => '更新时间updateTime'),
+        'express'         => array('col' => 'F', 'name' => '品牌'),
+        'description'     => array('col' => 'G', 'name' => '规格描述'),
+        'buy_count'       => array('col' => 'H', 'name' => '购买箱数'),
+        'mobile_phone'    => array('col' => 'I', 'name' => '手机Mobile'),
+        'status_text'     => array('col' => 'J', 'name' => '状态Status'),
+        'upd_time'        => array('col' => 'K', 'name' => '更新时间updateTime'),
     )
 );
 ?>

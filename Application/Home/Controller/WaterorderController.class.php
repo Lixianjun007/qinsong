@@ -38,6 +38,9 @@ class WaterorderController extends CommonController {
         //计算总价
         $price = 0;
         foreach ($params['courier'] as $k => $v) {
+            if($v['display_name'] == '脉动荔枝'){
+                $this->ajaxReturn('脉动荔枝味库存不足，请在订单中删除');
+            }
             $price += $v['price'] * $v['number'];
         }
         $price = sprintf("%.2f", $price);

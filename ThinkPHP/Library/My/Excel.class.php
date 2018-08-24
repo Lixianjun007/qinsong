@@ -126,6 +126,7 @@ class Excel
             $excel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
             $excel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
             $excel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+            $excel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
 
         }
 		

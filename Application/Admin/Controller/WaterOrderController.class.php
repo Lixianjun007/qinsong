@@ -108,7 +108,8 @@ class WaterOrderController extends CommonController {
                     foreach ($v['courier'] as $vs) {
                         $v['courier_text'] = $vs['brand'] . '/' . $vs['display_name'] . '/' . $vs['quat'] . '/' . $vs['quat_num']. '/' . $vs['number']. "\n";
                         $v['express'] = $vs['brand'];
-                        $v['description'] = $vs['display_name'] . '/' . $vs['quat'] . '*' . $vs['quat_num']. '/' . $vs['number'].'箱';
+                        $v['buy_count'] = $vs['number'].'箱';
+                        $v['description'] = $vs['display_name'] . '/' . $vs['quat'] . '*' . $vs['quat_num'];
                         $result[] = $v;
                     }
                 } else {
