@@ -21,17 +21,19 @@ class TestController  extends CommonController {
         parent::_initialize();
 
         // 登录校验
-        $this->Is_Login();
+//        $this->Is_Login();
 
         // 权限校验
-        $this->Is_Power();
+//        $this->Is_Power();
     }
     
     public function test(){
         
         $redis = RedisHelper::getRedisInstance();
-        $redis->setex('lxj', 'lsskssxie1');
-        var_dump($redis->get('lxj'));
+//        $redis->setex('lxj', json_encode(L('menuInfo')));
+        var_dump(json_decode($redis->get('lxj'), true));
+//        var_dump(L('menuInfo'));
+        
         echo 123;exit;
     }
     
