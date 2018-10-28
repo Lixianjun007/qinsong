@@ -119,4 +119,17 @@ return array(
 		    'key' 	=> '7kns21w3ldgu2ura6r7z7ig1muotanhz',
 		    'name' 	=> '395006522@qq.com',
 		],
+    //redis
+       'redis' => [
+        'store'=>[
+            'host' => '127.0.0.1',
+            'port' => '6379',
+            'password' => '123',
+            'timeout' => 3000,
+            'baseDB' => 0,
+            'DB0' => 0,
+            'DB2' => 2,
+            'DB4' => 4,
+        ],
+    ],
 );

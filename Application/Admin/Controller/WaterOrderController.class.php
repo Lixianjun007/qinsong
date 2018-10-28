@@ -1,5 +1,4 @@
 <?php
-
 namespace Admin\Controller;
 
 /**
@@ -47,14 +46,14 @@ class WaterOrderController extends CommonController {
         $where = $this->GetIndexWhere();
 
         // 分页
-        $number = 10;
+        $number     = 10;
         $page_param = array(
             'number' => $number,
-            'total' => $m->where($where)->where('status <> 5')->count(),
-            'where' => $param,
-            'url' => U('Admin/WaterOrder/Index'),
+            'total'  => $m->where($where)->where('status <> 5')->count(),
+            'where'  => $param,
+            'url'    => U('Admin/WaterOrder/Index'),
         );
-        $page = new \My\Page($page_param);
+        $page       = new \My\Page($page_param);
 
         $select = $m->where($where)->where('status <> 5')->limit($page->GetPageStarNumber(), $number);
         if (I('status', -1) != -1) {
@@ -96,25 +95,25 @@ class WaterOrderController extends CommonController {
         $where = $this->GetIndexWhere();
 
         // 读取数据
-        $data = $this->SetDataHandle(M('water_order')->where($where)->where('status <> 5')->select());
+        $data   = $this->SetDataHandle(M('water_order')->where($where)->where('status <> 5')->select());
         $result = array();
         if (!empty($data)) {
             $number = count($data);
             foreach ($data as $v) {
-                $v['number'] = $number;
+                $v['number']   = $number;
                 $v['order_id'] = $v['id'];
                 // 单号信息
                 if (!empty($v['courier'])) {
                     foreach ($v['courier'] as $vs) {
-                        $v['courier_text'] = $vs['brand'] . '/' . $vs['display_name'] . '/' . $vs['quat'] . '/' . $vs['quat_num']. '/' . $vs['number']. "\n";
-                        $v['express'] = $vs['brand'];
-                        $v['buy_count'] = $vs['number'].'箱';
-                        $v['description'] = $vs['display_name'] . '/' . $vs['quat'] . '*' . $vs['quat_num'];
-                        $result[] = $v;
+                        $v['courier_text'] = $vs['brand'] . '/' . $vs['display_name'] . '/' . $vs['quat'] . '/' . $vs['quat_num'] . '/' . $vs['number'] . "\n";
+                        $v['express']      = $vs['brand'];
+                        $v['buy_count']    = $vs['number'];
+                        $v['description']  = $vs['display_name'] . '/' . $vs['quat'] . '*' . $vs['quat_num'];
+                        $result[]          = $v;
                     }
                 } else {
                     $v['courier_text'] = '';
-                    $result[] = $v;
+                    $result[]          = $v;
                 }
                 $number--;
             }
@@ -122,7 +121,7 @@ class WaterOrderController extends CommonController {
 
         // Excel驱动导出数据
         $excel = new \My\Excel(array('filename' => 'water-order', 'title' => L('lxj2'), 'data' => array_reverse($result), 'msg' => L('common_not_data_tips')));
-        $excel->Export();
+        $excel->Export(true);
     }
 
     /**
@@ -153,7 +152,7 @@ class WaterOrderController extends CommonController {
 
                 // 单号信息
                 $data[$k]['courier'] = unserialize($v['courier']);
-                $courier_text = "";
+                $courier_text        = "";
                 if (!empty($data[$k]['courier'])) {
                     foreach ($data[$k]['courier'] as $vs) {
                         $courier_text .= $vs['number'] . '/' . $vs['goods'] . '/' . $vs['kg'] . "\n";
@@ -181,37 +180,37 @@ class WaterOrderController extends CommonController {
                 case 1:
                     $where[] = array(
                         'courier' => $like_keyword,
-                        '_logic' => 'or',
+                        '_logic'  => 'or',
                     );
                     break;
                 case 2:
                     $where[] = array(
                         'user_name' => $like_keyword,
-                        '_logic' => 'or',
+                        '_logic'    => 'or',
                     );
                     break;
                 case 3:
                     $where[] = array(
                         'mobile_phone' => $like_keyword,
-                        '_logic' => 'or',
+                        '_logic'       => 'or',
                     );
                     break;
                 case 4:
                     $where[] = array(
                         'order_number' => $like_keyword,
-                        '_logic' => 'or',
+                        '_logic'       => 'or',
                     );
                     break;
             }
         } else {
             if (!empty($_REQUEST['keyword'])) {
                 $like_keyword = array('like', '%' . I('keyword') . '%');
-                $where[] = array(
-                    'courier' => $like_keyword,
-                    'user_name' => $like_keyword,
+                $where[]      = array(
+                    'courier'      => $like_keyword,
+                    'user_name'    => $like_keyword,
                     'mobile_phone' => $like_keyword,
                     'order_number' => $like_keyword,
-                    '_logic' => 'or',
+                    '_logic'       => 'or',
                 );
             }
         }
@@ -272,7 +271,6 @@ class WaterOrderController extends CommonController {
 //        if (!(isset($data['order_number']) && $data['order_number'])) {
 //            $data['order_number'] = '七' . $pret . '-';
 //        }
-
 //        $this->assign('return_max', $return_max);
         $this->assign('data', $data);
 
@@ -305,21 +303,21 @@ class WaterOrderController extends CommonController {
 //            ],
             [
                 'checked_type' => 'isset',
-                'key_name' => 'status',
-                'error_msg' => '处理状态有误',
+                'key_name'     => 'status',
+                'error_msg'    => '处理状态有误',
             ],
             [
                 'checked_type' => 'empty',
-                'key_name' => 'courier',
-                'error_msg' => '单号信息有误',
+                'key_name'     => 'courier',
+                'error_msg'    => '单号信息有误',
             ],
             [
                 'checked_type' => 'empty',
-                'key_name' => 'id',
-                'error_msg' => '订单id有误',
+                'key_name'     => 'id',
+                'error_msg'    => '订单id有误',
             ]
         ];
-        $ret = params_checked($_POST, $params);
+        $ret    = params_checked($_POST, $params);
         if ($ret !== true) {
             $this->ajaxReturn($ret);
         }
@@ -338,29 +336,29 @@ class WaterOrderController extends CommonController {
     private function Edit() {
         // 数据处理
         $courier = [];
-        $price = 0;
+        $price   = 0;
         foreach ($_POST['courier']['number'] as $k => $v) {
             $courier[] = [
-                'brand' => $_POST['courier']['brand'][$k],
+                'brand'        => $_POST['courier']['brand'][$k],
                 'display_name' => $_POST['courier']['display_name'][$k],
-                'quat' => $_POST['courier']['quat'][$k],
-                'quat_num' =>$_POST['courier']['quat_num'][$k],
-                'price' => $_POST['courier']['price'][$k],
-                'number' => $v, 
+                'quat'         => $_POST['courier']['quat'][$k],
+                'quat_num'     => $_POST['courier']['quat_num'][$k],
+                'price'        => $_POST['courier']['price'][$k],
+                'number'       => $v,
             ];
-            $price += $v * $_POST['courier']['price'][$k];
+            $price     += $v * $_POST['courier']['price'][$k];
         }
 //        list($kg1, $kg2) = explode('.', $kg);
         $price = sprintf("%.2f", $price);
 
         // 更新数据
         $data = [
-            'price' => ($price < 5) ? 5 : $price,
+            'price'        => ($price < 5) ? 5 : $price,
 //            'price' => 0, //lxj
-            'courier' => serialize($courier),
-            'status' => I('status'),
+            'courier'      => serialize($courier),
+            'status'       => I('status'),
             'order_number' => I('order_number'),
-            'upd_time' => time(),
+            'upd_time'     => time(),
         ];
         if (M('water_order')->where(['id' => I('id')])->save($data)) {
 
@@ -444,7 +442,7 @@ class WaterOrderController extends CommonController {
             $this->error(L('common_unauthorized_access'), -1000);
         }
         $ids_arr = I('id');
-        $status = I('status');
+        $status  = I('status');
         if ($ids_arr && $status) {
             $data = ['status' => $status, 'upd_time' => time()];
             M('water_order')->where(['id' => ['in', $ids_arr]])->save($data);
@@ -455,5 +453,4 @@ class WaterOrderController extends CommonController {
     }
 
 }
-
 ?>
