@@ -114,9 +114,9 @@ class Excel
 
             $excel->getActiveSheet()->getStyle('A1')->getFont()->setSize(36) //字体大小
                                                         ->setBold(true); //字体加粗
-            $excel->getActiveSheet()->setCellValue('A1' , '上船船员物品清单 Crew Parcel Manifest');
-            $excel->getActiveSheet()->setTitle('上船船员物品清单 Crew Parcel Manifest');
-            $excel->getActiveSheet()->mergeCells('A1:K1');
+            $excel->getActiveSheet()->setCellValue('A1' , '上船船员物品清单 List of Crew stuff');
+            $excel->getActiveSheet()->setTitle('上船船员物品清单 List of Crew stuff');
+            $excel->getActiveSheet()->mergeCells('A1:I1');
             $excel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
             $excel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
             $excel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
@@ -126,7 +126,6 @@ class Excel
             $excel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
             $excel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
             $excel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-            $excel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
 
         }
 		
