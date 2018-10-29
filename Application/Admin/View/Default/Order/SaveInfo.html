@@ -19,7 +19,7 @@
             <!--状态 开始-->
             <div class="am-form-group">
                 <label>订单状态</label>
-                
+
                 <label class="am-radio-inline m-r-10">
                     <input type="radio" name="status" value="0"  <if condition="$data.status eq 0">checked="checked" </if> />待处理
                 </label>
@@ -48,8 +48,8 @@
             <!--状态 结束-->
             <!-- 订单编号 开始 -->
             <div class="am-form-group">
-                
-            <label>订单编号</label><p>最新操作的20条中，最大编号为：<div style="color: red;font-weight: bold"> {{$return_max}} </div>  </p>  
+
+                <label>订单编号</label><p>最新操作的20条中，最大编号为：<div style="color: red;font-weight: bold"> {{$return_max}} </div>  </p>  
                 <div>
                     <label class="am-radio-inline m-r-10">
                         <input class="am-radius form-keyword" name="order_number" value="{{$data.order_number}}" type="text">
@@ -64,12 +64,52 @@
                         <div class="m-b-10 o-h courier-items">
                             <p class="m-0 am-fl">{{$data.department_text}}  /  </p>
                             <p class="m-0 am-fl">{{$v.number}}</p>
+                            <p class="m-0 am-fl">
+                                <select name="courier[goods][{{$key}}]">
+                                    <if condition="$v.goods eq '文件 file'">
+                                    <option selected="selected"  value ="文件 file">文件 file</option>
+                                    <else />
+                                    <option  value ="文件 file">文件 file</option>
+                                    </if>
+                                    
+                                    <if condition="$v.goods eq '食品 food'">
+                                    <option selected="selected"  value ="食品 food">食品 food</option>
+                                    <else />
+                                    <option  value ="食品 food">食品 food</option>
+                                    </if>
+                                    
+                                    <if condition="$v.goods eq '服饰 dress'">
+                                    <option selected="selected"  value ="服饰 dress">服饰 dress</option>
+                                    <else />
+                                    <option  value ="服饰 dress">服饰 dress</option>
+                                    </if>
+                                    
+                                    <if condition="$v.goods eq '生活 life'">
+                                    <option selected="selected"  value ="生活 life">生活 life</option>
+                                    <else />
+                                    <option  value ="生活 life">生活 life</option>
+                                    </if>
+                                    
+                                    <if condition="$v.goods eq '数码 digit'">
+                                    <option selected="selected"  value ="数码 digit">数码 digit</option>
+                                    <else />
+                                    <option  value ="数码 digit">数码 digit</option>
+                                    </if>
+                                    
+                                    <if condition="$v.goods eq '其他 other'">
+                                    <option selected="selected"  value ="其他 other">其他 other</option>
+                                    <else />
+                                    <option  value ="其他 other">其他 other</option>
+                                    </if>
+                                    
+                                </select>
+                            </p>
                             <p class="m-0 am-fl m-l-15">
                                 <span class="fl">{{$v.goods}} /</span>
                                 <input type="text" name="courier[kg][{{$v.key}}]" class="am-input-sm am-fl m-l-5 m-r-5" value="{{$v.kg}}" data-validation-message="请填写单号重量" required />kg
                             </p>
                             <input type="hidden" name="courier[number][{{$key}}]" value="{{$v.number}}" />
-                            <input type="hidden" name="courier[goods][{{$key}}]" value="{{$v.goods}}" />
+                            <!--<input type="hidden" name="courier[goods][{{$key}}]" value="{{$v.goods}}" />-->
                         </div>
                     </foreach>
                 </div>
