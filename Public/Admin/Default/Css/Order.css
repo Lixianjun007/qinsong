@@ -17,7 +17,7 @@
 	.view-operation button { margin: 2px 0px; }
 }
 @media only screen and (min-width: 641px) {
-	.param-where { width: 32% !important; float: left; }
+	.param-where { width: 20% !important; float: left; }
 	.param-date input { width: 45% !important; }
 }
 .td-title { width: 30%; }
