@@ -70,6 +70,9 @@ class OrderController extends CommonController {
 
         // 部门
         $this->assign('order_department_list', L('order_department_list'));
+        
+        // 船舶号
+        $this->assign('order_ship_list', L('order_ship_list'));
 
         // 参数
         $this->assign('param', $param);
@@ -226,6 +229,10 @@ class OrderController extends CommonController {
             // 部门
             if (I('department') != -1) {
                 $where['department'] = intval(I('department'));
+            }
+            // 船舶
+            if (I('ship') != -1) {
+                $where['ship'] = intval(I('ship'));
             }
 
             // 表达式

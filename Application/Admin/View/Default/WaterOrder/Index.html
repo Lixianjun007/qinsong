@@ -34,6 +34,12 @@
                             <option value="{{$key}}" <if condition="isset($param['department']) and $param['department'] eq $key">selected</if>>{{$v}}</option>
                         </foreach>
                     </select>
+                 <select name="ship" class="am-radius c-p m-t-10 m-l-5 param-where">
+                        <option value="-1">船舶号</option>
+                        <foreach name="order_ship_list" item="v">
+                            <option value="{{$key}}" <if condition="isset($param['ship']) and $param['ship'] eq $key">selected</if>>{{$v}}</option>
+                        </foreach>
+                    </select>
                     <div class="param-date param-where m-l-5">
                         <input type="text" name="time_start" readonly="readonly" class="am-radius m-t-10" placeholder="{{:L('common_time_start_name')}}" id="time_start" <if condition="isset($param['time_start'])">value="{{$param.time_start}}"</if>/>
                         <span>~</span>
@@ -80,7 +86,7 @@
                         <td>{{$v.user_name}}</td>
                         <td>{{$v.mobile_phone}}</td>
                         <td class="am-hide-sm-only">{{$v.department_text}}</td>
-                        <td class="am-hide-sm-only">{{$v.ship_text}}</td>
+                        <td class="am-hide-sm-only" style="color: red;font-weight: bold;">{{$v.ship_text}}</td>
                         <td>
                     <foreach name="v.courier" item="vs">
                         <div class="m-b-10">
