@@ -264,22 +264,27 @@ class OrderController extends CommonController {
                 $data['courier'] = unserialize($data['courier']);
             }
         }
-        $history = M('Order')->field('order_number')->where(['status' => 1])->order('upd_time desc')->limit(20)->select();
+        // 部门
+        $data['department_text'] = L('order_department_list')[$data['department']];
+        //船号
+        $data['boat_text'] = L('order_ship_list')[$data['ship']];
+        list($pret, $numt) = explode('.', $data['department_text']);
+        $per_num_tmp = M('tmp_num')->where('type = 1')->find();
+        $order_per_text = $data['boat_text'].'-'.$per_num_tmp['number'];
+        $map['order_number'] = ['like', $order_per_text . '%'];
+        $map['status'] = ['in', [1,2]];
+        $history = M('Order')->field('order_number')->where($map)->order('upd_time desc')->limit(20)->select();
         $max = 0;
         foreach ($history as $k => $v) {
-            list($pre, $num) = explode('-', $v['order_number']);
+            list($pre, $nono, $num) = explode('-', $v['order_number']);
             if ($num > $max) {
                 $max = $num;
                 $return_max = $v['order_number'];
             }
         }
-        // 部门
-        $data['department_text'] = L('order_department_list')[$data['department']];
-        list($pret, $numt) = explode('.', $data['department_text']);
         if (!(isset($data['order_number']) && $data['order_number'])) {
-            $per_num_tmp = M('tmp_num')->where('type = 1')->find();
             
-            $data['order_number'] = $per_num_tmp['number'] . $pret . '-';
+            $data['order_number'] = $order_per_text . $pret . '-';
         }
 
         $this->assign('return_max', $return_max);

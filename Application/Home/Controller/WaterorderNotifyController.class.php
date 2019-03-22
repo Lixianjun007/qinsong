@@ -76,9 +76,10 @@ class WaterorderNotifyController extends CommonController {
     public function addOrderNumber($order_id) {
         $data = M('water_order')->field('department')->find($order_id);
         $data['department_text'] = L('order_department_list')[$data['department']]; //获得部门
+        $data['boat_text'] = L('order_ship_list')[$data['ship']];
         list($pret, $numt) = explode('.', $data['department_text']);
         $per_num_tmp = M('tmp_num')->where('type = 1')->find();
-        $data['order_number'] = 'water-' . $per_num_tmp['number'];
+        $data['order_number'] = $data['boat_text'] . '-water-' . $per_num_tmp['number'];
 
         $map['order_number'] = ['like', $data['order_number'] . '%'];
         $tmp_num = M('water_order')->where($map)->count();
