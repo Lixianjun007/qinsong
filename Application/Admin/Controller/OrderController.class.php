@@ -362,7 +362,12 @@ class OrderController extends CommonController {
             $kg += $_POST['courier']['kg'][$k];
         }
         list($kg1, $kg2) = explode('.', $kg);
-        $price = sprintf("%.2f", 5 + ($kg1 - 1) * 1);
+        if(($kg1-floor($kg1)) >= 0.5){
+            $kg1 = floor($kg1)+ 0.5;
+        }else{
+            $kg1 = floor($kg1);
+        }
+        $price = sprintf("%.2f", 5 + ($kg1 - 1) * 2);
 
         // 更新数据
         $data = [
